@@ -1,0 +1,2 @@
+rootProject.name='Deskbook'
+include ':app'

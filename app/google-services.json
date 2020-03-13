@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "172035903330",
+    "firebase_url": "https://deskbookingsystem.firebaseio.com",
+    "project_id": "deskbookingsystem",
+    "storage_bucket": "deskbookingsystem.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172035903330:android:6fc60ffbb0779ae624663b",
+        "android_client_info": {
+          "package_name": "com.example.deskbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "172035903330-qfa935hla0nhrfn873gei1n6tfj4ubjm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATJHBGDR8ntMhT3hsesvoJHzsJt_kaPVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "172035903330-qfa935hla0nhrfn873gei1n6tfj4ubjm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
