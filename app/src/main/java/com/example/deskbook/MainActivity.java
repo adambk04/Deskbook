@@ -1,8 +1,5 @@
 package com.example.deskbook;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +9,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,18 +20,22 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
+import java.util.Iterator;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     public Button btnSignUp;
-    public EditText etEmail, etPassword;
+    public EditText etEmail, etPassword, etPasscode;
     public TextView tvSignIn;
     FirebaseAuth firebaseAuth;
+    DatabaseReference dbRef;
     private FirebaseAuth.AuthStateListener authStateListener;
+    String code, passcode, email , password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,28 +45,15 @@ public class MainActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.BtnSignup);
         etEmail = findViewById(R.id.ETemail);
         etPassword = findViewById(R.id.ETpassword);
+        etPasscode = findViewById(R.id.ETpasscode);
         tvSignIn = findViewById(R.id.TVsignIn);
         etEmail.requestFocus();
 
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference myRef = database.child("employeeCode/");
+//        DatabaseReference dbEmployee = FirebaseDatabase.getInstance().getReference("employeeCode");
+//        dbEmployee.child("employeeCode").child("0001");
 
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                HashMap<String, String> post = dataSnapshot.getValue(String.class);
-                System.out.println(post);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                System.out.println(databaseError.toException());
-                // ...
-            }
-        };
-        myRef.addListenerForSingleValueEvent(postListener);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        dbRef = database.getReference("/employeeCode");
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
@@ -75,31 +66,23 @@ public class MainActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
+                email = etEmail.getText().toString();
+                password = etPassword.getText().toString();
+                passcode = etPasscode.getText().toString();
                 if (email.isEmpty()) {
                     etEmail.setError("Provide your Email first!");
                     etEmail.requestFocus();
                 } else if (password.isEmpty()) {
                     etPassword.setError("Set your password");
                     etPassword.requestFocus();
-                } else if (email.isEmpty() && password.isEmpty()) {
+                } else if (passcode.isEmpty()){
+                    etPasscode.setError("Employee ID empty");
+                    etPasscode.requestFocus();
+                } else if (email.isEmpty() && password.isEmpty() && passcode.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Fields Empty!", Toast.LENGTH_SHORT).show();
-                } else if (!(email.isEmpty() && password.isEmpty())) {
-                    firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(MainActivity.this, new OnCompleteListener() {
-                        @Override
-                        public void onComplete(@NonNull Task task) {
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(MainActivity.this.getApplicationContext(),
-                                        "SignUp unsuccessful: " + task.getException().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
-                                Intent I = new Intent(MainActivity.this, UserActivity.class);
-                                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(I);
-                            }
-                        }
-                    });
+                } else if (!(email.isEmpty() && password.isEmpty() && passcode.isEmpty())) {
+                    Query query = dbRef.orderByChild("code").equalTo(passcode);
+                    query.addListenerForSingleValueEvent(valueEventListener);
                 } else {
                     Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
                 }
@@ -113,4 +96,41 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+//                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+//                    code  = childSnapshot.getKey();
+//                    System.out.println("***************code = " + code);
+//                }
+//                code = dataSnapshot.getKey();
+//                System.out.println("***************code = " + code);
+            Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
+            Iterator<DataSnapshot> iterator = snapshotIterator.iterator();
+
+            while (iterator.hasNext()) {
+                DataSnapshot next = (DataSnapshot) iterator.next();
+                code = next.child("code").getValue().toString();
+            }
+            if(passcode.equals(code)) {
+                firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(MainActivity.this, new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(MainActivity.this.getApplicationContext(),
+                                    "SignUp unsuccessful: " + task.getException().getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent I = new Intent(MainActivity.this, UserActivity.class);
+                            I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(I);
+                        }
+                    }
+                });
+            }
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 }
