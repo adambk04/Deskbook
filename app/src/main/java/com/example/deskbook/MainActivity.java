@@ -33,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
     public EditText etEmail, etPassword, etPasscode;
     public TextView tvSignIn;
     FirebaseAuth firebaseAuth;
+    FirebaseDatabase database;
     DatabaseReference dbRef;
+    FirebaseUser user;
     private FirebaseAuth.AuthStateListener authStateListener;
     String code, passcode, email , password;
 
@@ -49,13 +51,10 @@ public class MainActivity extends AppCompatActivity {
         tvSignIn = findViewById(R.id.TVsignIn);
         etEmail.requestFocus();
 
-//        DatabaseReference dbEmployee = FirebaseDatabase.getInstance().getReference("employeeCode");
-//        dbEmployee.child("employeeCode").child("0001");
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/employeeCode");
 
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        user = firebaseAuth.getCurrentUser();
         if (user != null) {
             Toast.makeText(MainActivity.this, "User logged in ", Toast.LENGTH_SHORT).show();
             Intent I = new Intent(MainActivity.this, UserActivity.class);
@@ -121,16 +120,31 @@ public class MainActivity extends AppCompatActivity {
                                     "SignUp unsuccessful: " + task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Intent I = new Intent(MainActivity.this, UserActivity.class);
+                            dbRef.orderByChild("code").equalTo(code).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String codeKey = dataSnapshot.getChildren().iterator().next().getKey();
+                                    dbRef.child(codeKey).child("email").setValue(email);
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                            Intent I = new Intent(MainActivity.this, SetupProfileActivity.class);
                             I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(I);
                         }
                     }
                 });
             }
+            else {
+                Toast.makeText(MainActivity.this, "Incorrect Employee ID", Toast.LENGTH_LONG).show();
+            }
         }
         @Override
         public void onCancelled(DatabaseError databaseError) {
+
         }
     };
 }
