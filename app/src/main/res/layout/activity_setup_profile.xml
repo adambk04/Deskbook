@@ -63,14 +63,12 @@
 
     <ImageView
         android:id="@+id/IVprofile"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="80dp"
         android:layout_marginTop="16dp"
-        android:background="@android:mipmap/sym_def_app_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/BTNpicture"

@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         if (user != null) {
             Toast.makeText(MainActivity.this, "User logged in ", Toast.LENGTH_SHORT).show();
-            Intent I = new Intent(MainActivity.this, UserActivity.class);
+            Intent I = new Intent(MainActivity.this, SetupProfileActivity.class);
             startActivity(I);
             finish();
         }
