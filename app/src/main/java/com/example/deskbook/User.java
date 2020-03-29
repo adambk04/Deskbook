@@ -10,18 +10,20 @@ public class User {
     private String phone;
     private String gender;
     private String profilePic;
+    private String pictureName;
 
     public User(){
 
     }
 
-    public User(String name, String email, String department, String phone, String gender, String profilePic){
+    public User(String name, String email, String department, String phone, String gender, String profilePic, String pictureName){
         this.name = name;
         this.email = email;
         this.department = department;
         this.phone = phone;
         this.gender = gender;
         this.profilePic = profilePic;
+        this.pictureName = pictureName;
     }
 
     public String getName(){
@@ -41,6 +43,9 @@ public class User {
     }
     public String getProfilePic(){
         return profilePic;
+    }
+    public String getPictureName(){
+        return pictureName;
     }
 
 }
