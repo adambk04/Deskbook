@@ -114,6 +114,9 @@ public class SetupProfileActivity extends AppCompatActivity {
                 }
             });
         }
+        else {
+            Glide.with(getApplicationContext()).load("https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/ProfilePictures%2FdefaultImage.png?alt=media&token=9cd07814-6faf-4f5a-81f1-7faf307b25f0").into(ivProfile);
+        }
 
         rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -176,14 +179,14 @@ public class SetupProfileActivity extends AppCompatActivity {
                             //If intent came from updating user profile
                             if(check == 1){
                                 updateUser(pictureUrl, pictureName);
-                                Intent I = new Intent(SetupProfileActivity.this, UserProfileActivity.class);
+                                Intent I = new Intent(SetupProfileActivity.this, HomeActivity.class);
                                 I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(I);
                             }
                             //Store user information after uploading image
                             else {
                                 storeUser(pictureUrl, pictureName);
-                                Intent I = new Intent(SetupProfileActivity.this, UserProfileActivity.class);
+                                Intent I = new Intent(SetupProfileActivity.this, HomeActivity.class);
                                 startActivity(I);
                                 finish();
                             }
@@ -206,11 +209,21 @@ public class SetupProfileActivity extends AppCompatActivity {
         }
         //if user does not choose a new picture
         else{
-            updateUserWithoutImgChange();
-            Toast.makeText(SetupProfileActivity.this, "UserUpdated", Toast.LENGTH_SHORT).show();
-            Intent I = new Intent(SetupProfileActivity.this, UserProfileActivity.class);
-            I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(I);
+            if(check == 1) {
+                updateUserWithoutImgChange();
+                Toast.makeText(SetupProfileActivity.this, "UserUpdated", Toast.LENGTH_SHORT).show();
+                Intent I = new Intent(SetupProfileActivity.this, HomeActivity.class);
+                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(I);
+            }
+            else {
+                String pictureUrl = "https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/ProfilePictures%2FdefaultImage.png?alt=media&token=9cd07814-6faf-4f5a-81f1-7faf307b25f0";
+                String pictureName = "ProfilePictures/defaultImage.png";
+                storeUser(pictureUrl, pictureName);
+                Intent I = new Intent(SetupProfileActivity.this, HomeActivity.class);
+                startActivity(I);
+                finish();
+            }
         }
     }
 
@@ -277,8 +290,10 @@ public class SetupProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User users = dataSnapshot.getChildren().iterator().next().getValue(User.class);
                 String profilePictureName = users.getPictureName();
-                storageReference = storageReference.child(profilePictureName);
-                storageReference.delete();
+                if(!profilePictureName.equals("ProfilePictures/defaultImage.png")) {
+                    storageReference = storageReference.child(profilePictureName);
+                    storageReference.delete();
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
