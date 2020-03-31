@@ -49,5 +49,12 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(I);
             }
         });
+
+        btnBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 }
