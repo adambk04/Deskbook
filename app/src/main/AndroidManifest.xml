@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UserProfileActivity"></activity>
+        <activity
+            android:name=".SortWorkspaceDialog"
+            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert">
+        </activity>
+        <activity android:name=".UserProfileActivity" />
         <activity android:name=".SetupProfileActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".LoginActivity" />
@@ -21,8 +25,8 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>
