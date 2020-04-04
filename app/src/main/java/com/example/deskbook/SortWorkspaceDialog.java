@@ -99,12 +99,12 @@ public class SortWorkspaceDialog extends AppCompatActivity {
 
     public void checkChecked(View v){
         int x = 0;
-        if(cbProjector.isChecked()){
-            amenities[x] = "Projector";
-            x++;
-        }
         if(cbMonitor.isChecked()){
             amenities[x] = "Monitor";
+            x++;
+        }
+        if(cbProjector.isChecked()){
+            amenities[x] = "Projector";
             x++;
         }
         if(cbTelephone.isChecked()){

@@ -6,13 +6,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class WorkspaceListActivity extends AppCompatActivity {
 
     RecyclerView workspaceList;
+    TextView tvWorkspaceName, tvAmenities;
+    FirebaseRecyclerAdapter firebaseRecyclerAdapter;
     FirebaseDatabase database;
     DatabaseReference dbRef;
 
@@ -28,10 +32,18 @@ public class WorkspaceListActivity extends AppCompatActivity {
         workspaceList.setHasFixedSize(true);
         workspaceList.setLayoutManager(new LinearLayoutManager(this));
 
-    }
+        tvWorkspaceName = findViewById(R.id.TVegWorkspaceName);
+        tvAmenities = findViewById(R.id.TVegAmenities);
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+
+
+
+
     }
+//
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        firebaseRecyclerAdapter
+//    }
 }
