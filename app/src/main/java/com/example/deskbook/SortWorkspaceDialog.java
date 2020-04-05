@@ -2,6 +2,7 @@ package com.example.deskbook;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +18,7 @@ public class SortWorkspaceDialog extends AppCompatActivity {
     CheckBox cbProjector, cbMonitor, cbTelephone, cbNone;
     Button btnSort;
     public static String workspaceType;
-    public static String[] amenities;
+    public static String amenity1, amenity2, amenity3, amenity4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,35 +86,29 @@ public class SortWorkspaceDialog extends AppCompatActivity {
         btnSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                amenities = new String[4];
+                amenity1 = null;
+                amenity2 = null;
+                amenity3 = null;
+                amenity4 = null;
                 checkChecked(v);
-                for(int i = 0;i < 4; i++){
-                    if(amenities[i] != null)
-                        System.out.println("amenities " + i + " = " + amenities[i]);
-                }
-                System.out.println("workspace type " + workspaceType);
-
+                Intent I = new Intent(SortWorkspaceDialog.this, WorkspaceListActivity.class);
+                startActivity(I);
             }
         });
     }
 
     public void checkChecked(View v){
-        int x = 0;
         if(cbMonitor.isChecked()){
-            amenities[x] = "Monitor";
-            x++;
+            amenity1 = "Monitor";
         }
         if(cbProjector.isChecked()){
-            amenities[x] = "Projector";
-            x++;
+            amenity2 = "Projector";
         }
         if(cbTelephone.isChecked()){
-            amenities[x] = "Telephone";
-            x++;
+            amenity3= "Telephone";
         }
         if(cbNone.isChecked()){
-            amenities[x] = "None";
-            x++;
+            amenity4 = "None";
         }
     }
 }

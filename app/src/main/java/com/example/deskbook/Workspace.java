@@ -45,7 +45,7 @@ public class Workspace {
         return amenities;
     }
 
-    public class Amenities {
+    public static class Amenities {
         private String amenity1;
         private String amenity2;
         private String amenity3;
@@ -54,7 +54,6 @@ public class Workspace {
         public Amenities(){
 
         }
-
         public Amenities(String amenity1, String amenity2, String amenity3, String amenity4) {
             this.amenity1 = amenity1;
             this.amenity2 = amenity2;
