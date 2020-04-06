@@ -1,5 +1,8 @@
 package com.example.deskbook;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
 public class Workspace {
     private String workspaceName;
     private String workspaceType;
@@ -75,6 +78,29 @@ public class Workspace {
 
         public String getAmenity4() {
             return amenity4;
+        }
+
+        public String getFullAmenity(){
+            String a1, a2, a3, a4;
+            String fa = "";
+            a1 = getAmenity1();
+            a2 = getAmenity2();
+            a3 = getAmenity3();
+            a4 = getAmenity4();
+            if (a1.equals("Monitor")){
+                fa = fa + a1 + "\n";
+            }
+            if (a2.equals("Projector")){
+                fa = fa + a2 + "\n";
+            }
+            if (a3.equals("Telephone")){
+                fa = fa + a3 + "\n";
+            }
+            if (a4.equals("None")){
+                fa = fa + a4 + "\n";
+            }
+            fa = fa.substring(0, fa.length() - 1);
+            return fa;
         }
     }
 }
