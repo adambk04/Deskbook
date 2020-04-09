@@ -13,7 +13,7 @@
         <activity android:name=".WorkspaceListActivity" />
         <activity
             android:name=".SortWorkspaceDialog"
-            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
+            android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".SetupProfileActivity" />
         <activity android:name=".HomeActivity" />

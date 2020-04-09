@@ -99,7 +99,7 @@ public class WorkspaceListActivity extends AppCompatActivity {
                     public void onClick(View view) {
 //                        Toast.makeText(WorkspaceListActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
                         String workspaceKey = adapter.getRef(position).getKey();
-                        Intent I = new Intent(WorkspaceListActivity.this, SetupProfileActivity.class);
+                        Intent I = new Intent(WorkspaceListActivity.this, WorkspaceBookSlotActivity.class);
                         I.putExtra("key", workspaceKey);
                         startActivity(I);
                     }
