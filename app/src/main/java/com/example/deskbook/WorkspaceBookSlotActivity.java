@@ -17,11 +17,15 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Arrays;
 
 public class WorkspaceBookSlotActivity extends AppCompatActivity {
 
@@ -30,10 +34,13 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
     Chip chip8, chip9, chip10, chip11, chip12, chip13, chip14, chip15, chip16, chip17, chip18, chip19;
     Button btnSelectTime;
     FirebaseDatabase database;
-    DatabaseReference dbRef;
-    String aPackage;
+    DatabaseReference dbRef,dbRef2;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
+    String packageName;
     String workspaceKey;
     int clickNum = 0;
+    int []time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +65,18 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
         chip18 = findViewById(R.id.Chip18);
         chip19 = findViewById(R.id.Chip19);
 
-        aPackage = this.getPackageName();
+        packageName = this.getPackageName();
 
         Intent intent = getIntent();
         workspaceKey = intent.getStringExtra("key");
-//        Toast.makeText(WorkspaceBookSlotActivity.this, workspaceKey, Toast.LENGTH_SHORT).show();
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+
+        // To fill up workspace information
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/workspace/" + workspaceKey);
+        dbRef2 = database.getReference("/workspace/" + workspaceKey + "/booking/" + HomeActivity.bookDate);
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -78,34 +89,148 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
-
-        dbRef.child("booking").child(HomeActivity.bookDate).addValueEventListener(new ValueEventListener() {
+        // To make booked time slot uncheckable and red color
+        dbRef2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     for(DataSnapshot ds : dataSnapshot.getChildren()){
                         System.out.println("time booked : " + ds.getKey());
                         String x = ds.getKey();
-                        Chip chip = (Chip)findViewById(getResources().getIdentifier("Chip" + x, "id", aPackage ));
+                        Chip chip = (Chip)findViewById(getResources().getIdentifier("Chip" + x, "id", packageName ));
                         chip.setCheckable(false);
-                        chip.setChipBackgroundColor(getResources().getColorStateList(R.color.red));
+                        chip.setChipBackgroundColor(getResources().getColorStateList(R.color.booked));
                     }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
-
-        chip9.setOnClickListener(new View.OnClickListener() {
+//        chip8.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(chip8.isChecked()){
+//                    chip8.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+//                }
+//            }
+//        });
+//        chip9.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(chip9.isChecked()){
+//                    chip9.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+//                }
+//            }
+//        });
+//        chip10.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(chip10.isChecked()){
+//                    chip10.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+//                }
+//            }
+//        });
+//        chip11.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(chip11.isChecked()){
+//                    chip11.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+//                }
+//            }
+//        });
+//        chip12.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(chip12.isChecked()){
+//                    chip12.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+//                }
+//            }
+//        });
+//        chip13.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(chip13.isChecked()){
+//                    chip13.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+//                }
+//            }
+//        });
+//        chip14.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(chip14.isChecked()){
+//                    chip14.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+//                }
+//            }
+//        });
+//        chip15.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(chip15.isChecked()){
+//                    chip15.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+//                }
+//            }
+//        });
+//        chip16.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(chip16.isChecked()){
+//                    chip16.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+//                }
+//            }
+//        });
+//        chip17.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(chip17.isChecked()){
+//                    chip17.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+//                }
+//            }
+//        });
+//        chip18.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(chip18.isChecked()){
+//                    chip18.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+//                }
+//            }
+//        });
+//        chip19.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(chip19.isChecked()){
+//                    chip19.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+//                }
+//            }
+//        });
+        btnSelectTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setCheckFalse(9);
+                boolean checkError = getCheckedError();
+                if(time[0] == 99) {
+                    Toast.makeText(WorkspaceBookSlotActivity.this, "Please Select Time Slot", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if (checkError) {
+                        for (int i = 0; i < 12; i++) {
+                            if (time[i] != 99) {
+                                String timeSlot = Integer.toString(time[i]);
+                                dbRef2.child(timeSlot).setValue(user.getEmail());
+                            }
+                        }
+                        String stringTime = "Time slot : ";
+                        for (int i = 0; i < 12; i++) {
+                            if (time[i] != 99) {
+                                stringTime = stringTime + Integer.toString(time[i]);
+                            }
+                        }
+                        Toast.makeText(WorkspaceBookSlotActivity.this, stringTime, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(WorkspaceBookSlotActivity.this, "Cant leave gap between timeslot", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
     }
@@ -123,7 +248,47 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
         clickNum = clickNum + 1;
     }
 
-    public void setUnavailableSlot(){
-
+    public boolean getCheckedError(){
+        int count = 0;
+        int error = 0;
+        time = new int[12];
+        for(int i = 8 ; i < 20 ; i++){
+            Chip chip = (Chip) findViewById(getResources().getIdentifier("Chip" + i, "id", packageName));
+            if (chip.isChecked()) {
+                time[count] = i;
+            }
+            else {
+                time[count] = 99;
+            }
+            count++;
+        }
+        //to sort array in ascending order
+        Arrays.sort(time);
+        //to check if there is gap between selected time slot
+        for(int x = 0 ; x < 12 ; x++){
+            if (time[x] != 99 && time[x+1] != 99) {
+                if (time[x + 1] - time[x] != 1) {
+                    error = 1;
+                    break;
+                }
+            }
+        }
+        if(error == 0){
+            return true;
+        }
+        else
+            return false;
     }
+
+//    public void getTimeSlot(){
+//        timeSlot = new String[12];
+//        int count = 0;
+//        for (int i = 8 ; i < 20 ; i ++) {
+//            Chip chip = (Chip) findViewById(getResources().getIdentifier("Chip" + i, "id", packageName));
+//            if (chip.isChecked()) {
+//                timeSlot[count] = Integer.toString(i);
+//                count++;
+//            }
+//        }
+//    }
 }
