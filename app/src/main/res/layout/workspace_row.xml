@@ -11,8 +11,6 @@
     android:layout_marginRight="8dp"
     android:layout_marginBottom="6dp"
     android:orientation="vertical"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="90dp"
     tools:layout_editor_absoluteX="16dp"
     tools:layout_editor_absoluteY="8dp">
 
@@ -63,7 +61,8 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/TVlocation"
                 app:layout_constraintStart_toEndOf="@+id/IVworkspace"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread" />
 
             <TextView
                 android:id="@+id/TVlocation"

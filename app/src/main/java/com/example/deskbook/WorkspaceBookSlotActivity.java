@@ -2,8 +2,11 @@ package com.example.deskbook;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +31,7 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
     Button btnSelectTime;
     FirebaseDatabase database;
     DatabaseReference dbRef;
+    String aPackage;
     String workspaceKey;
     int clickNum = 0;
 
@@ -54,9 +58,11 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
         chip18 = findViewById(R.id.Chip18);
         chip19 = findViewById(R.id.Chip19);
 
+        aPackage = this.getPackageName();
+
         Intent intent = getIntent();
         workspaceKey = intent.getStringExtra("key");
-        Toast.makeText(WorkspaceBookSlotActivity.this, workspaceKey, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(WorkspaceBookSlotActivity.this, workspaceKey, Toast.LENGTH_SHORT).show();
 
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/workspace/" + workspaceKey);
@@ -70,6 +76,26 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
                 tvAmenities2.setText(workspace.getAmenities().getFullAmenity());
                 Glide.with(getApplicationContext()).load(workspace.getWorkspaceImage()).into(ivWorkspace2);
             }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        dbRef.child("booking").child(HomeActivity.bookDate).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        System.out.println("time booked : " + ds.getKey());
+                        String x = ds.getKey();
+                        Chip chip = (Chip)findViewById(getResources().getIdentifier("Chip" + x, "id", aPackage ));
+                        chip.setCheckable(false);
+                        chip.setChipBackgroundColor(getResources().getColorStateList(R.color.red));
+                    }
+                }
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -95,5 +121,9 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
             }
         }
         clickNum = clickNum + 1;
+    }
+
+    public void setUnavailableSlot(){
+
     }
 }
