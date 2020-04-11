@@ -40,7 +40,7 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
     String packageName;
     String workspaceKey;
     int clickNum = 0;
-    int []time;
+    public static int []time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,19 +214,22 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
                 }
                 else {
                     if (checkError) {
-                        for (int i = 0; i < 12; i++) {
-                            if (time[i] != 99) {
-                                String timeSlot = Integer.toString(time[i]);
-                                dbRef2.child(timeSlot).setValue(user.getEmail());
-                            }
-                        }
-                        String stringTime = "Time slot : ";
-                        for (int i = 0; i < 12; i++) {
-                            if (time[i] != 99) {
-                                stringTime = stringTime + Integer.toString(time[i]);
-                            }
-                        }
-                        Toast.makeText(WorkspaceBookSlotActivity.this, stringTime, Toast.LENGTH_SHORT).show();
+                        Intent I = new Intent(WorkspaceBookSlotActivity.this, BookSlotConfirmationDialog.class);
+                        I.putExtra("key", workspaceKey);
+                        startActivity(I);
+//                        for (int i = 0; i < 12; i++) {
+//                            if (time[i] != 99) {
+//                                String timeSlot = Integer.toString(time[i]);
+//                                dbRef2.child(timeSlot).setValue(user.getEmail());
+//                            }
+//                        }
+//                        String stringTime = "Time slot : ";
+//                        for (int i = 0; i < 12; i++) {
+//                            if (time[i] != 99) {
+//                                stringTime = stringTime + Integer.toString(time[i]);
+//                            }
+//                        }
+//                        Toast.makeText(WorkspaceBookSlotActivity.this, stringTime, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(WorkspaceBookSlotActivity.this, "Cant leave gap between timeslot", Toast.LENGTH_SHORT).show();
                     }

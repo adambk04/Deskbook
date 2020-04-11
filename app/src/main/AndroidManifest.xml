@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BookSlotConfirmationDialog"></activity>
+        <activity
+            android:name=".BookSlotConfirmationDialog"
+            android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert"/>
         <activity android:name=".WorkspaceBookSlotActivity" />
         <activity android:name=".WorkspaceListActivity" />
         <activity

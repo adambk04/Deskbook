@@ -97,7 +97,7 @@ public class Workspace {
                 fa = fa + a3 + "\n";
             }
             if (a4.equals("None")){
-                fa = fa + a4 + "\n";
+                fa = "Amenities : \n" + a4 + "\n";
             }
             fa = fa.substring(0, fa.length() - 1);
             return fa;
