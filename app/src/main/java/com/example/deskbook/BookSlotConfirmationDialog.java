@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,15 +19,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 public class BookSlotConfirmationDialog extends AppCompatActivity {
 
     TextView tvWorkspaceName3, tvLocation3, tvAmenities3, tvTimeSlot;
     Button btnConfirm, btnCancel;
     FirebaseDatabase database;
-    DatabaseReference dbRef,dbRef2;
+    DatabaseReference dbRef,dbRef2,dbRef3,dbref4;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
-    String workspaceKey;
+    String workspaceKey, bookStartTime, bookEndTime;
+    int count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +59,7 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/workspace/" + workspaceKey);
         dbRef2 = database.getReference("/workspace/" + workspaceKey + "/booking/" + HomeActivity.bookDate);
+        dbRef3 = database.getReference("/users/");
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -67,12 +78,50 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //store booking information into workspace table and get first and last element in time slot array to make start time and end time
+                count = 0;
                 for (int i = 0; i < 12; i++) {
                     if (WorkspaceBookSlotActivity.time[i] != 99) {
                         String timeSlot = Integer.toString(WorkspaceBookSlotActivity.time[i]);
                         dbRef2.child(timeSlot).setValue(user.getEmail());
+                        count++;
                     }
                 }
+                if(count == 1 ){
+                    if(WorkspaceBookSlotActivity.time[0] < 10){
+                        bookStartTime = "0" + WorkspaceBookSlotActivity.time[0] + ":00";
+                        if(WorkspaceBookSlotActivity.time[0] + 1 >= 10){
+                            bookEndTime = WorkspaceBookSlotActivity.time[0] + 1 + ":00";
+                        }
+                        else {
+                            bookEndTime = "0" + WorkspaceBookSlotActivity.time[0] + 1 + ":00";
+                        }
+                    }
+                    else{
+                        bookStartTime = WorkspaceBookSlotActivity.time[0] + ":00";
+                        bookEndTime = WorkspaceBookSlotActivity.time[0] + 1 + ":00";
+                    }
+                }
+                else {
+                    bookStartTime = Integer.toString(WorkspaceBookSlotActivity.time[0]);
+                    bookEndTime = Integer.toString(WorkspaceBookSlotActivity.time[count-1] + 1);
+                }
+                //store booking information into user table
+                dbRef3.orderByChild("email").equalTo(user.getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String userkey = dataSnapshot.getChildren().iterator().next().getKey();
+                        dbref4 = database.getReference("/users/" + userkey + "/booking/");
+                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
+                        String currentDateTime = df.format(Calendar.getInstance().getTime());
+                        UserBooking book = new UserBooking(HomeActivity.bookDate, workspaceKey, bookStartTime, bookEndTime, "0", "0",
+                                "0", "0", "Pending", currentDateTime);
+                        dbref4.child(currentDateTime).setValue(book);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
             }
         });
     }

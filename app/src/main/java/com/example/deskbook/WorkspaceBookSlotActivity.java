@@ -238,19 +238,6 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
         });
     }
 
-    public void setCheckFalse(int x){
-        for (int i = 8 ; i < 20 ; i ++){
-            Chip chipTemp = (Chip)findViewById(getResources().getIdentifier("Chip" + i, "id", this.getPackageName()));
-            Chip chipOriginal = (Chip)findViewById(getResources().getIdentifier("Chip" + x, "id", this.getPackageName()));
-            Chip chipPlus1 = (Chip)findViewById(getResources().getIdentifier("Chip" + (x+1), "id", this.getPackageName()));
-            Chip chipMinus1 = (Chip)findViewById(getResources().getIdentifier("Chip" + (x-1), "id", this.getPackageName()));
-            if (chipTemp != chipOriginal && chipTemp != chipPlus1 && chipTemp != chipMinus1){
-                chipTemp.setCheckable(false);
-            }
-        }
-        clickNum = clickNum + 1;
-    }
-
     public boolean getCheckedError(){
         int count = 0;
         int error = 0;
@@ -282,6 +269,19 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
         else
             return false;
     }
+
+//    public void setCheckFalse(int x){
+//        for (int i = 8 ; i < 20 ; i ++){
+//            Chip chipTemp = (Chip)findViewById(getResources().getIdentifier("Chip" + i, "id", this.getPackageName()));
+//            Chip chipOriginal = (Chip)findViewById(getResources().getIdentifier("Chip" + x, "id", this.getPackageName()));
+//            Chip chipPlus1 = (Chip)findViewById(getResources().getIdentifier("Chip" + (x+1), "id", this.getPackageName()));
+//            Chip chipMinus1 = (Chip)findViewById(getResources().getIdentifier("Chip" + (x-1), "id", this.getPackageName()));
+//            if (chipTemp != chipOriginal && chipTemp != chipPlus1 && chipTemp != chipMinus1){
+//                chipTemp.setCheckable(false);
+//            }
+//        }
+//        clickNum = clickNum + 1;
+//    }
 
 //    public void getTimeSlot(){
 //        timeSlot = new String[12];

@@ -240,7 +240,7 @@ public class SetupProfileActivity extends AppCompatActivity {
         String email = user.getEmail();
         String department = etDepartment.getText().toString().trim();
         String phoneNum = etPhoneNum.getText().toString().trim();
-        User user = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName);
+        User user = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName, "0");
         String id = dbRef.push().getKey();
         dbRef.child(id).setValue(user);
     }
@@ -250,7 +250,7 @@ public class SetupProfileActivity extends AppCompatActivity {
         String email = user.getEmail();
         String department = etDepartment.getText().toString().trim();
         String phoneNum = etPhoneNum.getText().toString().trim();
-        final User users = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName);
+        final User users = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName, "0");
         dbRef.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -275,7 +275,7 @@ public class SetupProfileActivity extends AppCompatActivity {
                 String email = user.getEmail();
                 String department = etDepartment.getText().toString().trim();
                 String phoneNum = etPhoneNum.getText().toString().trim();
-                User user2 = new User(name, email, department, phoneNum, gender, picUrl, picName);
+                User user2 = new User(name, email, department, phoneNum, gender, picUrl, picName, "0");
                 dbRef.child(userkey).setValue(user2);
             }
             @Override

@@ -11,12 +11,13 @@ public class User {
     private String gender;
     private String profilePic;
     private String pictureName;
+    private String userLevel;
 
     public User(){
 
     }
 
-    public User(String name, String email, String department, String phone, String gender, String profilePic, String pictureName){
+    public User(String name, String email, String department, String phone, String gender, String profilePic, String pictureName, String userLevel){
         this.name = name;
         this.email = email;
         this.department = department;
@@ -24,6 +25,7 @@ public class User {
         this.gender = gender;
         this.profilePic = profilePic;
         this.pictureName = pictureName;
+        this.userLevel = userLevel;
     }
 
     public String getName(){
@@ -47,5 +49,7 @@ public class User {
     public String getPictureName(){
         return pictureName;
     }
-
+    public String getUserLevel() {
+        return userLevel;
+    }
 }

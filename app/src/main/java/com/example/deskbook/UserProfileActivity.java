@@ -48,22 +48,22 @@ public class UserProfileActivity extends AppCompatActivity {
         tvPhoneNum = findViewById(R.id.TVphoneNum);
         btnEditProfile = findViewById(R.id.BTNeditProfile);
 
-//        dbRef.orderByChild("email").equalTo(user.getEmail()).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                User users = dataSnapshot.getChildren().iterator().next().getValue(User.class);
-//                tvEmail.setText(users.getEmail());
-//                tvName.setText(users.getName());
-//                tvDepartment.setText(users.getDepartment());
-//                tvGender.setText(users.getGender());
-//                tvPhoneNum.setText(users.getPhone());
-//                String profilePicUrl = users.getProfilePic();
-//                Glide.with(getApplicationContext()).load(profilePicUrl).into(ivProfilePic);
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//            }
-//        });
+        dbRef.orderByChild("email").equalTo(user.getEmail()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User users = dataSnapshot.getChildren().iterator().next().getValue(User.class);
+                tvEmail.setText(users.getEmail());
+                tvName.setText(users.getName());
+                tvDepartment.setText(users.getDepartment());
+                tvGender.setText(users.getGender());
+                tvPhoneNum.setText(users.getPhone());
+                String profilePicUrl = users.getProfilePic();
+                Glide.with(getApplicationContext()).load(profilePicUrl).into(ivProfilePic);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
 
         btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override

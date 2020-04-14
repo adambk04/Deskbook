@@ -1,5 +1,6 @@
 package com.example.deskbook;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -10,8 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
@@ -103,4 +106,18 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+//    dbRef = database.getReference("/users/-M3ePNbuCvTbhlt-Y7PF/booking");
+//        dbRef.orderByChild("bookingID").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+//        @Override
+//        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//            String bookKey = dataSnapshot.getChildren().iterator().next().getKey();
+//            Toast.makeText(SetupProfileActivity.this, bookKey, Toast.LENGTH_SHORT).show();
+//        }
+//
+//        @Override
+//        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//        }
+//    });
 }
