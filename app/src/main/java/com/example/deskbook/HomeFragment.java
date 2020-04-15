@@ -2,6 +2,7 @@ package com.example.deskbook;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.app.DatePickerDialog;
@@ -25,11 +26,6 @@ import java.util.Calendar;
 public class HomeFragment extends Fragment {
 
     public Button btnLogout, btnBook;
-    int check;
-    private int mYear, mMonth, mDay;
-    public static String bookDate;
-    DatePickerDialog datePickerDialog;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,45 +49,53 @@ public class HomeFragment extends Fragment {
         btnBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                check = 0;
-                final Calendar c = Calendar.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
-
-                datePickerDialog = new DatePickerDialog(getActivity().getApplicationContext(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth) {
-                        String month, day, y;
-                        if (dayOfMonth < 10) {
-                            day = "0" + dayOfMonth;
-                        } else {
-                            day = Integer.toString(dayOfMonth);
-                        }
-                        if (monthOfYear < 10) {
-                            month = "0" + (monthOfYear + 1);
-                        } else {
-                            month = Integer.toString(monthOfYear + 1);
-                        }
-                        y = Integer.toString(year);
-                        bookDate = year + "-" + month + "-" + day;
-                        check = 1;
-                    }
-                }, mYear, mMonth, mDay);
-                datePickerDialog.show();
-                datePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface arg0) {
-                        // do something onDismiss
-                        if (check == 1) {
-                            Intent I = new Intent(getActivity().getApplicationContext(), SortWorkspaceDialog.class);
-                            startActivity(I);
-                        }
-                    }
-                });
+                DialogFragment newFragment = new SelectDateFragment();
+                newFragment.show(getFragmentManager(), "DatePicker");
             }
         });
+
+//        btnBook.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                check = 0;
+//                final Calendar c = Calendar.getInstance();
+//                mYear = c.get(Calendar.YEAR);
+//                mMonth = c.get(Calendar.MONTH);
+//                mDay = c.get(Calendar.DAY_OF_MONTH);
+//
+//                datePickerDialog = new DatePickerDialog(getActivity().getApplicationContext(), new DatePickerDialog.OnDateSetListener() {
+//                    @Override
+//                    public void onDateSet(DatePicker view, int year,
+//                                          int monthOfYear, int dayOfMonth) {
+//                        String month, day, y;
+//                        if (dayOfMonth < 10) {
+//                            day = "0" + dayOfMonth;
+//                        } else {
+//                            day = Integer.toString(dayOfMonth);
+//                        }
+//                        if (monthOfYear < 10) {
+//                            month = "0" + (monthOfYear + 1);
+//                        } else {
+//                            month = Integer.toString(monthOfYear + 1);
+//                        }
+//                        y = Integer.toString(year);
+//                        bookDate = year + "-" + month + "-" + day;
+//                        check = 1;
+//                    }
+//                }, mYear, mMonth, mDay);
+//                datePickerDialog.show();
+//                datePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                    @Override
+//                    public void onDismiss(DialogInterface arg0) {
+//                        // do something onDismiss
+//                        if (check == 1) {
+//                            Intent I = new Intent(getActivity().getApplicationContext(), SortWorkspaceDialog.class);
+//                            startActivity(I);
+//                        }
+//                    }
+//                });
+//            }
+//        });
     }
 
 //    public Button btnLogout, btnUserProfile, btnBook, btnSetupProfile;

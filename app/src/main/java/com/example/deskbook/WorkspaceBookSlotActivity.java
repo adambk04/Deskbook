@@ -72,7 +72,7 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
         // To fill up workspace information
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/workspace/" + workspaceKey);
-        dbRef2 = database.getReference("/workspace/" + workspaceKey + "/booking/" + HomeFragment.bookDate);
+        dbRef2 = database.getReference("/workspace/" + workspaceKey + "/booking/" + MainFragmentActivity.bookDate);
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

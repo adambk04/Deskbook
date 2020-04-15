@@ -23,7 +23,7 @@ import java.util.Calendar;
 
 public class BookSlotConfirmationDialog extends AppCompatActivity {
 
-    TextView tvWorkspaceName3, tvLocation3, tvAmenities3, tvTimeSlot;
+    TextView tvWorkspaceName3, tvLocation3, tvAmenities3, tvTimeSlot, tvBookDate;
     Button btnConfirm, btnCancel;
     FirebaseDatabase database;
     DatabaseReference dbRef,dbRef2,dbRef3,dbref4;
@@ -44,6 +44,7 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
         tvLocation3 = findViewById(R.id.TVlocation3);
         tvAmenities3 = findViewById(R.id.TVamenity3);
         tvTimeSlot = findViewById(R.id.TVtimeSlot);
+        tvBookDate = findViewById(R.id.TVbookDate);
         btnCancel = findViewById(R.id.BtnCancelBookSlot);
         btnConfirm = findViewById(R.id.BtnConfirmBook);
 
@@ -52,7 +53,7 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/workspace/" + workspaceKey);
-        dbRef2 = database.getReference("/workspace/" + workspaceKey + "/booking/" + HomeFragment.bookDate);
+        dbRef2 = database.getReference("/workspace/" + workspaceKey + "/booking/" + MainFragmentActivity.bookDate);
         dbRef3 = database.getReference("/users/");
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -63,6 +64,7 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
                 tvLocation3.setText(workspace.getLocation());
                 tvAmenities3.setText(workspace.getAmenities().getFullAmenity());
                 tvTimeSlot.setText(getTimeString());
+                tvBookDate.setText(MainFragmentActivity.bookDate);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -108,7 +110,7 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
                         dbref4 = database.getReference("/users/" + userkey + "/booking/");
                         DateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
                         String currentDateTime = df.format(Calendar.getInstance().getTime());
-                        UserBooking book = new UserBooking(HomeFragment.bookDate, workspaceKey, bookStartTime, bookEndTime, "0", "0",
+                        UserBooking book = new UserBooking(MainFragmentActivity.bookDate, workspaceKey, bookStartTime, bookEndTime, "0", "0",
                                 "0", "0", "Pending", currentDateTime);
                         dbref4.child(currentDateTime).setValue(book);
                     }

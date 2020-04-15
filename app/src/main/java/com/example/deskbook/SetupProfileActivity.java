@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -55,6 +56,7 @@ public class SetupProfileActivity extends AppCompatActivity {
     FirebaseUser user;
     FirebaseDatabase database;
     DatabaseReference dbRef;
+    FragmentManager fragmentManager;
 
 
     @Override
@@ -64,6 +66,8 @@ public class SetupProfileActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+
+        fragmentManager = getSupportFragmentManager();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -174,14 +178,17 @@ public class SetupProfileActivity extends AppCompatActivity {
                             //If intent came from updating user profile
                             if(check == 1){
                                 updateUser(pictureUrl, pictureName);
-                                Intent I = new Intent(SetupProfileActivity.this, HomeFragment.class);
-                                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
+                                I.putExtra("check", 1);
+//                                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                finish();
                                 startActivity(I);
                             }
                             //Store user information after uploading image
                             else {
                                 storeUser(pictureUrl, pictureName);
-                                Intent I = new Intent(SetupProfileActivity.this, HomeFragment.class);
+                                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
                                 startActivity(I);
                                 finish();
                             }
@@ -207,15 +214,18 @@ public class SetupProfileActivity extends AppCompatActivity {
             if(check == 1) {
                 updateUserWithoutImgChange();
                 Toast.makeText(SetupProfileActivity.this, "UserUpdated", Toast.LENGTH_SHORT).show();
-                Intent I = new Intent(SetupProfileActivity.this, HomeFragment.class);
-                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
+                I.putExtra("check", 1);
+//                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                finish();
                 startActivity(I);
             }
             else {
                 String pictureUrl = "https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/ProfilePictures%2FdefaultImage.png?alt=media&token=9cd07814-6faf-4f5a-81f1-7faf307b25f0";
                 String pictureName = "ProfilePictures/defaultImage.png";
                 storeUser(pictureUrl, pictureName);
-                Intent I = new Intent(SetupProfileActivity.this, HomeFragment.class);
+                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
                 startActivity(I);
                 finish();
             }

@@ -25,7 +25,7 @@ public class SortWorkspaceDialog extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sort_workspace_dialog);
         setTitle("Select Workspace Type");
-        Toast.makeText(SortWorkspaceDialog.this, HomeFragment.bookDate, Toast.LENGTH_SHORT).show();
+        Toast.makeText(SortWorkspaceDialog.this, MainFragmentActivity.bookDate, Toast.LENGTH_SHORT).show();
 
         rgWorkspace = findViewById(R.id.RGworkspace);
         rbDesk = findViewById(R.id.RBdesk);
