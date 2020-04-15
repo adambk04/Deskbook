@@ -2,12 +2,8 @@ package com.example.deskbook;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -76,7 +72,7 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
         // To fill up workspace information
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/workspace/" + workspaceKey);
-        dbRef2 = database.getReference("/workspace/" + workspaceKey + "/booking/" + HomeActivity.bookDate);
+        dbRef2 = database.getReference("/workspace/" + workspaceKey + "/booking/" + HomeFragment.bookDate);
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

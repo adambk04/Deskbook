@@ -2,7 +2,6 @@ package com.example.deskbook;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         if (user != null) {
             Toast.makeText(MainActivity.this, "User logged in ", Toast.LENGTH_SHORT).show();
-            Intent I = new Intent(MainActivity.this, HomeActivity.class);
+            Intent I = new Intent(MainActivity.this, MainFragmentActivity.class);
             startActivity(I);
             finish();
         }

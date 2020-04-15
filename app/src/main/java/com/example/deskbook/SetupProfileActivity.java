@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.icu.text.SymbolTable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,13 +16,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -40,8 +37,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.util.BitSet;
-import java.util.Set;
 import java.util.UUID;
 
 public class SetupProfileActivity extends AppCompatActivity {
@@ -179,14 +174,14 @@ public class SetupProfileActivity extends AppCompatActivity {
                             //If intent came from updating user profile
                             if(check == 1){
                                 updateUser(pictureUrl, pictureName);
-                                Intent I = new Intent(SetupProfileActivity.this, HomeActivity.class);
+                                Intent I = new Intent(SetupProfileActivity.this, HomeFragment.class);
                                 I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(I);
                             }
                             //Store user information after uploading image
                             else {
                                 storeUser(pictureUrl, pictureName);
-                                Intent I = new Intent(SetupProfileActivity.this, HomeActivity.class);
+                                Intent I = new Intent(SetupProfileActivity.this, HomeFragment.class);
                                 startActivity(I);
                                 finish();
                             }
@@ -212,7 +207,7 @@ public class SetupProfileActivity extends AppCompatActivity {
             if(check == 1) {
                 updateUserWithoutImgChange();
                 Toast.makeText(SetupProfileActivity.this, "UserUpdated", Toast.LENGTH_SHORT).show();
-                Intent I = new Intent(SetupProfileActivity.this, HomeActivity.class);
+                Intent I = new Intent(SetupProfileActivity.this, HomeFragment.class);
                 I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(I);
             }
@@ -220,7 +215,7 @@ public class SetupProfileActivity extends AppCompatActivity {
                 String pictureUrl = "https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/ProfilePictures%2FdefaultImage.png?alt=media&token=9cd07814-6faf-4f5a-81f1-7faf307b25f0";
                 String pictureName = "ProfilePictures/defaultImage.png";
                 storeUser(pictureUrl, pictureName);
-                Intent I = new Intent(SetupProfileActivity.this, HomeActivity.class);
+                Intent I = new Intent(SetupProfileActivity.this, HomeFragment.class);
                 startActivity(I);
                 finish();
             }

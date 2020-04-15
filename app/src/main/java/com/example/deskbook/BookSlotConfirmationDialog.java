@@ -8,9 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -21,11 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class BookSlotConfirmationDialog extends AppCompatActivity {
 
@@ -58,7 +52,7 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/workspace/" + workspaceKey);
-        dbRef2 = database.getReference("/workspace/" + workspaceKey + "/booking/" + HomeActivity.bookDate);
+        dbRef2 = database.getReference("/workspace/" + workspaceKey + "/booking/" + HomeFragment.bookDate);
         dbRef3 = database.getReference("/users/");
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -114,7 +108,7 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
                         dbref4 = database.getReference("/users/" + userkey + "/booking/");
                         DateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
                         String currentDateTime = df.format(Calendar.getInstance().getTime());
-                        UserBooking book = new UserBooking(HomeActivity.bookDate, workspaceKey, bookStartTime, bookEndTime, "0", "0",
+                        UserBooking book = new UserBooking(HomeFragment.bookDate, workspaceKey, bookStartTime, bookEndTime, "0", "0",
                                 "0", "0", "Pending", currentDateTime);
                         dbref4.child(currentDateTime).setValue(book);
                     }

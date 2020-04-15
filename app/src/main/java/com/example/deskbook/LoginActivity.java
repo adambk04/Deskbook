@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (!task.isSuccessful()) {
                                 Toast.makeText(LoginActivity.this, "Not sucessfull", Toast.LENGTH_SHORT).show();
                             } else {
-                                Intent I = new Intent(LoginActivity.this, HomeActivity.class);
+                                Intent I = new Intent(LoginActivity.this, HomeFragment.class);
                                 I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(I);
                             }
