@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import  androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +34,8 @@ public class ProfileFragment extends Fragment {
     DatabaseReference dbRef;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
+    String userID;
+    Activity activity;
 
     @Nullable
     @Override
@@ -43,9 +47,12 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
+        userID = user.getUid();
 
         database = FirebaseDatabase.getInstance();
-        dbRef = database.getReference("/users");
+        dbRef = database.getReference("/users/" + userID);
+
+        activity = getActivity();
 
         ivProfilePic = view.findViewById(R.id.IVprofilePic);
         tvName = view.findViewById(R.id.TVname);
@@ -55,17 +62,21 @@ public class ProfileFragment extends Fragment {
         tvPhoneNum = view.findViewById(R.id.TVphoneNum);
         btnEditProfile = view.findViewById(R.id.BTNeditProfile);
 
-        dbRef.orderByChild("email").equalTo(user.getEmail()).addValueEventListener(new ValueEventListener() {
+        dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User users = dataSnapshot.getChildren().iterator().next().getValue(User.class);
+                if (activity == null) {
+                    Intent I = new Intent(activity, MainFragmentActivity.class);
+                    I.putExtra("check", 1);
+                }
+                User users = dataSnapshot.getValue(User.class);
                 tvEmail.setText(users.getEmail());
                 tvName.setText(users.getName());
                 tvDepartment.setText(users.getDepartment());
                 tvGender.setText(users.getGender());
                 tvPhoneNum.setText(users.getPhone());
                 String profilePicUrl = users.getProfilePic();
-                Glide.with(getActivity().getApplicationContext()).load(profilePicUrl).into(ivProfilePic);
+                Glide.with(activity).load(profilePicUrl).into(ivProfilePic);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -81,22 +92,9 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        dbRef.orderByChild("email").equalTo(user.getEmail()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User users = dataSnapshot.getChildren().iterator().next().getValue(User.class);
-                tvEmail.setText(users.getEmail());
-                tvName.setText(users.getName());
-                tvDepartment.setText(users.getDepartment());
-                tvGender.setText(users.getGender());
-                tvPhoneNum.setText(users.getPhone());
-                String profilePicUrl = users.getProfilePic();
-                Glide.with(getActivity().getApplicationContext()).load(profilePicUrl).into(ivProfilePic);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
+    }
+    static void loadImage(RequestManager glide, String url, ImageView view) {
+        glide.load(url).into(view);
     }
 
 //    ImageView ivProfilePic;

@@ -35,7 +35,6 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
     FirebaseUser user;
     String packageName;
     String workspaceKey;
-    int clickNum = 0;
     public static int []time;
 
     @Override

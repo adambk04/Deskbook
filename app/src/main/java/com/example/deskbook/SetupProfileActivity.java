@@ -57,6 +57,7 @@ public class SetupProfileActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference dbRef;
     FragmentManager fragmentManager;
+    String userID;
 
 
     @Override
@@ -70,9 +71,10 @@ public class SetupProfileActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
+        userID = user.getUid();
 
         database = FirebaseDatabase.getInstance();
-        dbRef = database.getReference("/users");
+        dbRef = database.getReference("/users/"+userID);
 
         ivProfile = findViewById(R.id.IVprofile);
         btnSaveProfile = findViewById(R.id.BTNsaveProfile);
@@ -89,10 +91,10 @@ public class SetupProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
         check = intent.getIntExtra("check",0);
         if(check == 1){
-            dbRef.orderByChild("email").equalTo(user.getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
+            dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    User users = dataSnapshot.getChildren().iterator().next().getValue(User.class);
+                    User users = dataSnapshot.getValue(User.class);
                     etName.setText(users.getName());
                     etDepartment.setText(users.getDepartment());
                     etPhoneNum.setText(users.getPhone());
@@ -178,12 +180,13 @@ public class SetupProfileActivity extends AppCompatActivity {
                             //If intent came from updating user profile
                             if(check == 1){
                                 updateUser(pictureUrl, pictureName);
-                                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
-                                I.putExtra("check", 1);
+                                finish();
+//                                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
+//                                I.putExtra("check", 1);
 //                                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                finish();
-                                startActivity(I);
+//                                finish();
+//                                startActivity(I);
                             }
                             //Store user information after uploading image
                             else {
@@ -214,12 +217,13 @@ public class SetupProfileActivity extends AppCompatActivity {
             if(check == 1) {
                 updateUserWithoutImgChange();
                 Toast.makeText(SetupProfileActivity.this, "UserUpdated", Toast.LENGTH_SHORT).show();
+                finish();
                 Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
-                I.putExtra("check", 1);
+//                I.putExtra("check", 1);
 //                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                finish();
-                startActivity(I);
+//                finish();
+//                startActivity(I);
             }
             else {
                 String pictureUrl = "https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/ProfilePictures%2FdefaultImage.png?alt=media&token=9cd07814-6faf-4f5a-81f1-7faf307b25f0";
@@ -246,8 +250,7 @@ public class SetupProfileActivity extends AppCompatActivity {
         String department = etDepartment.getText().toString().trim();
         String phoneNum = etPhoneNum.getText().toString().trim();
         User user = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName, "0");
-        String id = dbRef.push().getKey();
-        dbRef.child(id).setValue(user);
+        dbRef.setValue(user);
     }
 
     private void updateUser(String pictureUrl, String pictureName){
@@ -256,24 +259,14 @@ public class SetupProfileActivity extends AppCompatActivity {
         String department = etDepartment.getText().toString().trim();
         String phoneNum = etPhoneNum.getText().toString().trim();
         final User users = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName, "0");
-        dbRef.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String userkey = dataSnapshot.getChildren().iterator().next().getKey();
-                dbRef.child(userkey).setValue(users);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
+        dbRef.setValue(users);;
     }
 
     private void updateUserWithoutImgChange(){
-        dbRef.orderByChild("email").equalTo(user.getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String userkey = dataSnapshot.getChildren().iterator().next().getKey();
-                User users = dataSnapshot.getChildren().iterator().next().getValue(User.class);
+                User users = dataSnapshot.getValue(User.class);
                 String picName = users.getPictureName();
                 String picUrl = users.getProfilePic();
                 String name = etName.getText().toString().trim();
@@ -281,7 +274,7 @@ public class SetupProfileActivity extends AppCompatActivity {
                 String department = etDepartment.getText().toString().trim();
                 String phoneNum = etPhoneNum.getText().toString().trim();
                 User user2 = new User(name, email, department, phoneNum, gender, picUrl, picName, "0");
-                dbRef.child(userkey).setValue(user2);
+                dbRef.setValue(user2);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -290,10 +283,10 @@ public class SetupProfileActivity extends AppCompatActivity {
     }
 
     private void deletePrevProfilePicture(){
-        dbRef.orderByChild("email").equalTo(user.getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User users = dataSnapshot.getChildren().iterator().next().getValue(User.class);
+                User users = dataSnapshot.getValue(User.class);
                 String profilePictureName = users.getPictureName();
                 if(!profilePictureName.equals("ProfilePictures/defaultImage.png")) {
                     storageReference = storageReference.child(profilePictureName);

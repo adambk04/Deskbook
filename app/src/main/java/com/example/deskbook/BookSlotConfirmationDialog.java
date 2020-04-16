@@ -29,7 +29,7 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
     DatabaseReference dbRef,dbRef2,dbRef3,dbref4;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
-    String workspaceKey, bookStartTime, bookEndTime;
+    String workspaceKey, bookStartTime, bookEndTime, userID;
     int count;
 
     @Override
@@ -50,11 +50,13 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
+        userID = user.getUid();
 
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/workspace/" + workspaceKey);
         dbRef2 = database.getReference("/workspace/" + workspaceKey + "/booking/" + MainFragmentActivity.bookDate);
-        dbRef3 = database.getReference("/users/");
+        dbRef3 = database.getReference("/users/" + userID);
+        dbref4 = database.getReference("/users/" + userID + "/booking/");
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -79,7 +81,7 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
                 for (int i = 0; i < 12; i++) {
                     if (WorkspaceBookSlotActivity.time[i] != 99) {
                         String timeSlot = Integer.toString(WorkspaceBookSlotActivity.time[i]);
-                        dbRef2.child(timeSlot).setValue(user.getEmail());
+                        dbRef2.child(timeSlot).setValue(userID);
                         count++;
                     }
                 }
@@ -103,21 +105,11 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
                     bookEndTime = Integer.toString(WorkspaceBookSlotActivity.time[count-1] + 1);
                 }
                 //store booking information into user table
-                dbRef3.orderByChild("email").equalTo(user.getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String userkey = dataSnapshot.getChildren().iterator().next().getKey();
-                        dbref4 = database.getReference("/users/" + userkey + "/booking/");
-                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
-                        String currentDateTime = df.format(Calendar.getInstance().getTime());
-                        UserBooking book = new UserBooking(MainFragmentActivity.bookDate, workspaceKey, bookStartTime, bookEndTime, "0", "0",
-                                "0", "0", "Pending", currentDateTime);
-                        dbref4.child(currentDateTime).setValue(book);
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
+                String currentDateTime = df.format(Calendar.getInstance().getTime());
+                UserBooking book = new UserBooking(MainFragmentActivity.bookDate, workspaceKey, bookStartTime, bookEndTime, "0", "0",
+                        "0", "0", "Pending", currentDateTime);
+                dbref4.child(currentDateTime).setValue(book);
             }
         });
     }

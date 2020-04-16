@@ -2,6 +2,7 @@ package com.example.deskbook;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Iterator;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference dbRef;
     FirebaseUser user;
     private FirebaseAuth.AuthStateListener authStateListener;
-    String code, passcode, email , password;
+    String code, passcode, email , password, email2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,53 +99,94 @@ public class MainActivity extends AppCompatActivity {
     ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-//                    code  = childSnapshot.getKey();
-//                    System.out.println("***************code = " + code);
-//                }
-//                code = dataSnapshot.getKey();
-//                System.out.println("***************code = " + code);
-            Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
-            Iterator<DataSnapshot> iterator = snapshotIterator.iterator();
-
-            while (iterator.hasNext()) {
-                DataSnapshot next = (DataSnapshot) iterator.next();
-                code = next.child("code").getValue().toString();
-            }
-            if(passcode.equals(code)) {
-                firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(MainActivity.this, new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this.getApplicationContext(),
-                                    "SignUp unsuccessful: " + task.getException().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            dbRef.orderByChild("code").equalTo(code).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    String codeKey = dataSnapshot.getChildren().iterator().next().getKey();
-                                    dbRef.child(codeKey).child("email").setValue(email);
-                                }
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                            Intent I = new Intent(MainActivity.this, SetupProfileActivity.class);
-                            I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(I);
-                        }
-                    }
-                });
+            if(!dataSnapshot.exists()){
+                Toast.makeText(MainActivity.this, "incorrect employee code", Toast.LENGTH_SHORT).show();
             }
             else {
-                Toast.makeText(MainActivity.this, "Incorrect Employee ID", Toast.LENGTH_LONG).show();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    code = ds.child("code").getValue(String.class);
+                    email2 = ds.child("email").getValue(String.class);
+                    if(email2 != null){
+                        Toast.makeText(MainActivity.this, "Employee code has already been registered", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(MainActivity.this, new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if (!task.isSuccessful()) {
+                                Toast.makeText(MainActivity.this.getApplicationContext(),
+                                        "SignUp unsuccessful: " + task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                dbRef.orderByChild("code").equalTo(code).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        String codeKey = dataSnapshot.getChildren().iterator().next().getKey();
+                                        dbRef.child(codeKey).child("email").setValue(email);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                                Intent I = new Intent(MainActivity.this, LoginActivity.class);
+                                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(I);
+                            }
+                        }
+                    });
+                    }
+                }
             }
+
+//            if (dataSnapshot.getChildrenCount() > 1){
+////                Toast.makeText(MainActivity.this, "Employee code has already been registered", Toast.LENGTH_LONG).show();
+//
+//
+//            }
+//            else {
+//                Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
+//                Iterator<DataSnapshot> iterator = snapshotIterator.iterator();
+//
+//                while (iterator.hasNext()) {
+//                    DataSnapshot next = iterator.next();
+//                    code = next.child("code").getValue().toString();
+//                }
+//                if (passcode.equals(code)) {
+//                    firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(MainActivity.this, new OnCompleteListener() {
+//                        @Override
+//                        public void onComplete(@NonNull Task task) {
+//                            if (!task.isSuccessful()) {
+//                                Toast.makeText(MainActivity.this.getApplicationContext(),
+//                                        "SignUp unsuccessful: " + task.getException().getMessage(),
+//                                        Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                dbRef.orderByChild("code").equalTo(code).addListenerForSingleValueEvent(new ValueEventListener() {
+//                                    @Override
+//                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                        String codeKey = dataSnapshot.getChildren().iterator().next().getKey();
+//                                        dbRef.child(codeKey).child("email").setValue(email);
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                    }
+//                                });
+//                                Intent I = new Intent(MainActivity.this, SetupProfileActivity.class);
+//                                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                startActivity(I);
+//                            }
+//                        }
+//                    });
+//                } else {
+//                    Toast.makeText(MainActivity.this, "Incorrect Employee ID", Toast.LENGTH_LONG).show();
+//                }
+//            }
         }
         @Override
         public void onCancelled(DatabaseError databaseError) {
-
         }
     };
 }
