@@ -38,6 +38,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class SetupProfileActivity extends AppCompatActivity {
@@ -180,6 +182,10 @@ public class SetupProfileActivity extends AppCompatActivity {
                             //If intent came from updating user profile
                             if(check == 1){
                                 updateUser(pictureUrl, pictureName);
+                                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
+                                I.putExtra("check", 1);
+                                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(I);
                                 finish();
 //                                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
 //                                I.putExtra("check", 1);
@@ -258,8 +264,9 @@ public class SetupProfileActivity extends AppCompatActivity {
         String email = user.getEmail();
         String department = etDepartment.getText().toString().trim();
         String phoneNum = etPhoneNum.getText().toString().trim();
-        final User users = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName, "0");
-        dbRef.setValue(users);;
+        User users = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName, "0");
+        Map<String, Object> userValues = users.toMap();
+        dbRef.updateChildren(userValues);
     }
 
     private void updateUserWithoutImgChange(){
@@ -273,8 +280,9 @@ public class SetupProfileActivity extends AppCompatActivity {
                 String email = user.getEmail();
                 String department = etDepartment.getText().toString().trim();
                 String phoneNum = etPhoneNum.getText().toString().trim();
-                User user2 = new User(name, email, department, phoneNum, gender, picUrl, picName, "0");
-                dbRef.setValue(user2);
+                User user = new User(name, email, department, phoneNum, gender, picUrl, picName, "0");
+                Map<String, Object> userValues = user.toMap();
+                dbRef.updateChildren(userValues);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

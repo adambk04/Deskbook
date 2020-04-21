@@ -1,6 +1,10 @@
 package com.example.deskbook;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @IgnoreExtraProperties
 public class User {
@@ -12,6 +16,7 @@ public class User {
     private String profilePic;
     private String pictureName;
     private String userLevel;
+    public Map<String, Boolean> stars = new HashMap<>();
 
     public User(){
 
@@ -52,4 +57,17 @@ public class User {
     public String getUserLevel() {
         return userLevel;
     }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("name", name);
+        result.put("department", department);
+        result.put("phone", phone);
+        result.put("profilePic", profilePic);
+        result.put("pictureName", pictureName);
+        result.put("gender", gender);
+        return result;
+    }
+
 }
