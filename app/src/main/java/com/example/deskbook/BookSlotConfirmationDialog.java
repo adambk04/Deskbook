@@ -110,6 +110,9 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
                 UserBooking book = new UserBooking(MainFragmentActivity.bookDate, workspaceKey, bookStartTime, bookEndTime, "0", "0",
                         "0", "0", "Pending", currentDateTime);
                 dbref4.child(currentDateTime).setValue(book);
+                Intent I = new Intent(BookSlotConfirmationDialog.this, MainFragmentActivity.class);
+                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(I);
             }
         });
     }

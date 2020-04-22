@@ -65,10 +65,6 @@ public class ProfileFragment extends Fragment {
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (activity == null) {
-                    Intent I = new Intent(activity, MainFragmentActivity.class);
-                    I.putExtra("check", 1);
-                }
                 User users = dataSnapshot.getValue(User.class);
                 tvEmail.setText(users.getEmail());
                 tvName.setText(users.getName());
