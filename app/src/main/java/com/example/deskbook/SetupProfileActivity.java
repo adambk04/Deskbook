@@ -22,6 +22,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -110,7 +111,8 @@ public class SetupProfileActivity extends AppCompatActivity {
                         gender = "Female";
                     }
                     String profilePicUrl = users.getProfilePic();
-                    Glide.with(getApplicationContext()).load(profilePicUrl).into(ivProfile);
+//                    Glide.with(getApplicationContext()).load(profilePicUrl).into(ivProfile);
+                    Glide.with(getApplicationContext()).load(profilePicUrl).apply(RequestOptions.circleCropTransform()).into(ivProfile);
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -118,7 +120,7 @@ public class SetupProfileActivity extends AppCompatActivity {
             });
         }
         else {
-            Glide.with(getApplicationContext()).load("https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/ProfilePictures%2FdefaultImage.png?alt=media&token=9cd07814-6faf-4f5a-81f1-7faf307b25f0").into(ivProfile);
+            Glide.with(getApplicationContext()).load("https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/ProfilePictures%2FdefaultImage.png?alt=media&token=9cd07814-6faf-4f5a-81f1-7faf307b25f0").apply(RequestOptions.circleCropTransform()).into(ivProfile);
         }
 
         rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -182,11 +184,11 @@ public class SetupProfileActivity extends AppCompatActivity {
                             //If intent came from updating user profile
                             if(check == 1){
                                 updateUser(pictureUrl, pictureName);
-                                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
-                                I.putExtra("check", 1);
-                                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(I);
-                                finish();
+//                                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
+//                                I.putExtra("check", 1);
+//                                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                startActivity(I);
+//                                finish();
 //                                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
 //                                I.putExtra("check", 1);
 //                                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -224,7 +226,7 @@ public class SetupProfileActivity extends AppCompatActivity {
                 updateUserWithoutImgChange();
                 Toast.makeText(SetupProfileActivity.this, "UserUpdated", Toast.LENGTH_SHORT).show();
                 finish();
-                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
+//                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
 //                I.putExtra("check", 1);
 //                I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -267,6 +269,7 @@ public class SetupProfileActivity extends AppCompatActivity {
         User users = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName, "0");
         Map<String, Object> userValues = users.toMap();
         dbRef.updateChildren(userValues);
+        finish();
     }
 
     private void updateUserWithoutImgChange(){
@@ -314,7 +317,8 @@ public class SetupProfileActivity extends AppCompatActivity {
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),filePath);
-                ivProfile.setImageBitmap(bitmap);
+//                ivProfile.setImageBitmap(bitmap);
+                Glide.with(getApplicationContext()).load(bitmap).apply(RequestOptions.circleCropTransform()).into(ivProfile);
             }
             catch (IOException e){
                 e.printStackTrace();

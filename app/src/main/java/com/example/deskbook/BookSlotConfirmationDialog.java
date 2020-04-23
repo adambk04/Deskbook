@@ -100,9 +100,23 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
                         bookEndTime = WorkspaceBookSlotActivity.time[0] + 1 + ":00";
                     }
                 }
+//                else {
+//                    bookStartTime = Integer.toString(WorkspaceBookSlotActivity.time[0]);
+//                    bookEndTime = Integer.toString(WorkspaceBookSlotActivity.time[count-1] + 1);
+//                }
                 else {
-                    bookStartTime = Integer.toString(WorkspaceBookSlotActivity.time[0]);
-                    bookEndTime = Integer.toString(WorkspaceBookSlotActivity.time[count-1] + 1);
+                    if(WorkspaceBookSlotActivity.time[0] < 10) {
+                        bookStartTime = "0" + WorkspaceBookSlotActivity.time[0] + ":00";
+                    }
+                    else {
+                        bookStartTime = WorkspaceBookSlotActivity.time[0] + ":00";
+                    }
+                    if(WorkspaceBookSlotActivity.time[count-1] + 1 < 10){
+                        bookEndTime = "0" + WorkspaceBookSlotActivity.time[count-1] + 1 + ":00";
+                    }
+                    else{
+                        bookEndTime = WorkspaceBookSlotActivity.time[count-1] + 1 + ":00";
+                    }
                 }
                 //store booking information into user table
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH:mm");

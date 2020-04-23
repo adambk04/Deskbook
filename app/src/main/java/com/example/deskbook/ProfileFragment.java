@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -72,7 +73,8 @@ public class ProfileFragment extends Fragment {
                 tvGender.setText(users.getGender());
                 tvPhoneNum.setText(users.getPhone());
                 String profilePicUrl = users.getProfilePic();
-                Glide.with(activity).load(profilePicUrl).into(ivProfilePic);
+//                Glide.with(activity).load(profilePicUrl).into(ivProfilePic);
+                Glide.with(activity).load(profilePicUrl).apply(RequestOptions.circleCropTransform()).into(ivProfilePic);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
