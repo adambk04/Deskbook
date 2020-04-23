@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.chip.Chip;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -30,6 +30,7 @@ public class WorkspaceListActivity extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     FirebaseRecyclerAdapter adapter;
     String typeAmenityKey;
+    Chip chipDate, chipWorkspaceType, chipNone, chipMonitor, chipProjector,chipTelephone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,14 @@ public class WorkspaceListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_workspace_list);
 
         workspaceList = findViewById(R.id.RVworkspace);
+        chipDate = findViewById(R.id.ChipDate);
+        chipWorkspaceType = findViewById(R.id.ChipWorkspaceType);
+        chipNone = findViewById(R.id.ChipNone);
+        chipMonitor = findViewById(R.id.ChipMonitor);
+        chipProjector = findViewById(R.id.ChipProjector);
+        chipTelephone = findViewById(R.id.ChipTelephone);
 
+        generateChips();
         createTypeAmenityKey();
 
         database = FirebaseDatabase.getInstance();
@@ -48,6 +56,28 @@ public class WorkspaceListActivity extends AppCompatActivity {
         workspaceList.setHasFixedSize(true);
         fetch();
 
+    }
+
+    public void generateChips(){
+        chipDate.setText(MainFragmentActivity.bookDate);
+        if(SortWorkspaceDialog.workspaceType.equals("Desk")) {
+            chipWorkspaceType.setText("Desk");
+        }
+        else {
+            chipWorkspaceType.setText("Room");
+        }
+        if(SortWorkspaceDialog.amenity1 != null){
+            chipMonitor.setVisibility(View.VISIBLE);
+        }
+        if(SortWorkspaceDialog.amenity2 != null){
+            chipProjector.setVisibility(View.VISIBLE);
+        }
+        if(SortWorkspaceDialog.amenity3 != null){
+            chipTelephone.setVisibility(View.VISIBLE);
+        }
+        if(SortWorkspaceDialog.amenity4 != null){
+            chipNone.setVisibility(View.VISIBLE);
+        }
     }
 
     public void createTypeAmenityKey(){
