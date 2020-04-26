@@ -9,12 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainFragmentActivity"></activity>
+        <activity
+            android:name=".MainFragmentActivity"
+            android:theme="@style/HomeTheme">
+        </activity>
         <activity
             android:name=".BookSlotConfirmationDialog"
             android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />
-        <activity android:name=".WorkspaceBookSlotActivity" />
-        <activity android:name=".WorkspaceListActivity" />
+        <activity
+            android:name=".WorkspaceBookSlotActivity"
+            android:parentActivityName=".WorkspaceListActivity"/>
+        <activity
+            android:name=".WorkspaceListActivity"
+            android:parentActivityName=".SortWorkspaceDialog"/>
         <activity
             android:name=".SortWorkspaceDialog"
             android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />

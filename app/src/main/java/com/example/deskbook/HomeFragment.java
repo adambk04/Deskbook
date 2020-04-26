@@ -28,7 +28,7 @@ import org.w3c.dom.Text;
 
 public class HomeFragment extends Fragment {
 
-    Button btnLogout, btnBook;
+    Button btnBook;
     TextView tvWorkspaceName, tvLocation, tvBookDate, tvBookTime, tvAmenity, tvNoBooking;
     ImageView ivWorkspace;
     FirebaseDatabase database;
@@ -52,7 +52,6 @@ public class HomeFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/users/" + userID + "/booking");
 
-        btnLogout = view.findViewById(R.id.BtnLogout);
         btnBook = view.findViewById(R.id.BtnBook);
         tvAmenity = view.findViewById(R.id.TVamenity4);
         tvWorkspaceName = view.findViewById(R.id.TVworkspaceName4);
@@ -112,16 +111,6 @@ public class HomeFragment extends Fragment {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                Intent I = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
-                startActivity(I);
-                getActivity().finish();
             }
         });
 
