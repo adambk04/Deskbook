@@ -2,6 +2,7 @@ package com.example.deskbook;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,6 +42,14 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workspace_book_slot);
+
+        Toolbar toolbar = findViewById(R.id.Toolbar2);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         ivWorkspace2 = findViewById(R.id.IVworkspace2);
         tvWorkspaceName2 = findViewById(R.id.TVworkspaceName2);

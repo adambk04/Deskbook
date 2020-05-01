@@ -7,6 +7,17 @@
     android:orientation="vertical"
     tools:context=".WorkspaceListActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/Toolbar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/app_name"
+        android:background="@color/LightWhite"
+        app:titleTextColor="@color/colorAccent"
+        android:minHeight="?attr/actionBarSize"
+        android:elevation="4dp"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        android:theme="?attr/actionBarTheme" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"

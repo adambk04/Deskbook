@@ -2,6 +2,7 @@ package com.example.deskbook;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,11 +37,19 @@ public class WorkspaceListActivity extends AppCompatActivity {
     String typeAmenityKey;
     Chip chipDate, chipWorkspaceType, chipNone, chipMonitor, chipProjector,chipTelephone;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workspace_list);
 
+        Toolbar toolbar = findViewById(R.id.Toolbar1);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         workspaceList = findViewById(R.id.RVworkspace);
         chipDate = findViewById(R.id.ChipDate);

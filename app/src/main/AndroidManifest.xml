@@ -10,18 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainFragmentActivity"
-            android:theme="@style/HomeTheme">
-        </activity>
+            android:name=".MainFragmentActivity"/>
         <activity
             android:name=".BookSlotConfirmationDialog"
             android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />
         <activity
-            android:name=".WorkspaceBookSlotActivity"
-            android:parentActivityName=".WorkspaceListActivity"/>
+            android:name=".WorkspaceBookSlotActivity" />
         <activity
-            android:name=".WorkspaceListActivity"
-            android:parentActivityName=".SortWorkspaceDialog"/>
+            android:name=".WorkspaceListActivity" />
         <activity
             android:name=".SortWorkspaceDialog"
             android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />
