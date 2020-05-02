@@ -115,88 +115,88 @@ public class WorkspaceListActivity extends AppCompatActivity {
         }
     }
 
-    private void fetch(){
-        Query query = dbRef.orderByChild("typeAmenity").equalTo(typeAmenityKey);
+        private void fetch(){
+            Query query = dbRef.orderByChild("typeAmenity").equalTo(typeAmenityKey);
 
-        FirebaseRecyclerOptions<Workspace> options =
-                new FirebaseRecyclerOptions.Builder<Workspace>()
-                        .setQuery(query, Workspace.class).build();
+            FirebaseRecyclerOptions<Workspace> options =
+                    new FirebaseRecyclerOptions.Builder<Workspace>()
+                            .setQuery(query, Workspace.class).build();
 
-        adapter = new FirebaseRecyclerAdapter<Workspace, ViewHolder>(options) {
-            @Override
-            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.workspace_row, parent, false);
+            adapter = new FirebaseRecyclerAdapter<Workspace, ViewHolder>(options) {
+                @Override
+                public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                    View view = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.workspace_row, parent, false);
 
-                return new ViewHolder(view);
+                    return new ViewHolder(view);
+                }
+
+                @Override
+                protected void onBindViewHolder(ViewHolder holder, final int position, Workspace workspace) {
+                    holder.setTvWorkspaceName(workspace.getWorkspaceName());
+                    holder.setTvLocation(workspace.getLocation());
+                    holder.setIvWorkspace(workspace.getWorkspaceImage());
+                    holder.setTvAmenities(workspace.getAmenities().getFullAmenity());
+
+                    holder.root.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+    //                        Toast.makeText(WorkspaceListActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                            String workspaceKey = adapter.getRef(position).getKey();
+                            Intent I = new Intent(WorkspaceListActivity.this, WorkspaceBookSlotActivity.class);
+                            I.putExtra("key", workspaceKey);
+                            startActivity(I);
+                        }
+                    });
+                }
+
+            };
+            workspaceList.setAdapter(adapter);
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder{
+            public LinearLayout root;
+            public TextView tvWorkspaceName;
+            public TextView tvLocation;
+            public TextView tvAmenities;
+            public ImageView ivWorkspace;
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                root = itemView.findViewById(R.id.list_root);
+                tvWorkspaceName = itemView.findViewById(R.id.TVworkspaceName);
+                tvLocation = itemView.findViewById(R.id.TVlocation);
+                tvAmenities = itemView.findViewById(R.id.TVamenity);
+                ivWorkspace = itemView.findViewById(R.id.IVworkspace);
             }
 
-            @Override
-            protected void onBindViewHolder(ViewHolder holder, final int position, Workspace workspace) {
-                holder.setTvWorkspaceName(workspace.getWorkspaceName());
-                holder.setTvLocation(workspace.getLocation());
-                holder.setIvWorkspace(workspace.getWorkspaceImage());
-                holder.setTvAmenities(workspace.getAmenities().getFullAmenity());
-
-                holder.root.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-//                        Toast.makeText(WorkspaceListActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
-                        String workspaceKey = adapter.getRef(position).getKey();
-                        Intent I = new Intent(WorkspaceListActivity.this, WorkspaceBookSlotActivity.class);
-                        I.putExtra("key", workspaceKey);
-                        startActivity(I);
-                    }
-                });
+            public void setTvWorkspaceName(String string1) {
+                tvWorkspaceName.setText(string1);
             }
 
-        };
-        workspaceList.setAdapter(adapter);
-    }
+            public void setTvLocation(String string2) {
+                tvLocation.setText(string2);
+            }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        public LinearLayout root;
-        public TextView tvWorkspaceName;
-        public TextView tvLocation;
-        public TextView tvAmenities;
-        public ImageView ivWorkspace;
+            public void setTvAmenities(String string3) {
+                tvAmenities.setText(string3);
+            }
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            root = itemView.findViewById(R.id.list_root);
-            tvWorkspaceName = itemView.findViewById(R.id.TVworkspaceName);
-            tvLocation = itemView.findViewById(R.id.TVlocation);
-            tvAmenities = itemView.findViewById(R.id.TVamenity);
-            ivWorkspace = itemView.findViewById(R.id.IVworkspace);
+            public void setIvWorkspace(String  string4) {
+                Glide.with(getApplicationContext()).load(string4).into(ivWorkspace);
+            }
         }
 
-        public void setTvWorkspaceName(String string1) {
-            tvWorkspaceName.setText(string1);
+
+        @Override
+        protected void onStart() {
+            super.onStart();
+            adapter.startListening();
         }
 
-        public void setTvLocation(String string2) {
-            tvLocation.setText(string2);
+        @Override
+        protected void onStop() {
+            super.onStop();
+            adapter.stopListening();
         }
-
-        public void setTvAmenities(String string3) {
-            tvAmenities.setText(string3);
-        }
-
-        public void setIvWorkspace(String  string4) {
-            Glide.with(getApplicationContext()).load(string4).into(ivWorkspace);
-        }
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
 }
