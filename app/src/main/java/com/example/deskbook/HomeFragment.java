@@ -3,15 +3,21 @@ package com.example.deskbook;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,16 +34,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+
 public class HomeFragment extends Fragment {
 
+    Button btnStartBooking;
+    CardView cvStartBooking;
     RecyclerView rvBookingList;
     LinearLayoutManager linearLayoutManager;
     FirebaseDatabase database;
     FirebaseRecyclerAdapter adapter;
-    DatabaseReference dbRef,dbref2, dbref3;
+    DatabaseReference dbRef,dbref2;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
     String userID;
+    int total;
 
     @Nullable
     @Override
@@ -45,7 +55,7 @@ public class HomeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_home,null);
     }
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
 
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
@@ -54,84 +64,50 @@ public class HomeFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/users/" + userID + "/booking");
 
+        cvStartBooking = view.findViewById(R.id.CVstartBooking);
+        btnStartBooking = view.findViewById(R.id.BtnStartBooking);
+        btnStartBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = new SelectDateFragment();
+                newFragment.show(getFragmentManager(), "DatePicker");
+            }
+        });
+
+        dbRef.orderByChild("checkOutStatus").equalTo("0").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    cvStartBooking.setVisibility(view.VISIBLE);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         rvBookingList = view.findViewById(R.id.RVbooking);
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         rvBookingList.setLayoutManager(linearLayoutManager);
         rvBookingList.setHasFixedSize(true);
         fetch();
 
-//        btnBook = view.findViewById(R.id.BtnBook);
-//        tvAmenity = view.findViewById(R.id.TVamenity4);
-//        tvWorkspaceName = view.findViewById(R.id.TVworkspaceName4);
-//        tvBookDate = view.findViewById(R.id.TVbookDate4);
-//        tvBookTime = view.findViewById(R.id.TVbookTime4);
-//        tvLocation = view.findViewById(R.id.TVlocation4);
-//        ivWorkspace = view.findViewById(R.id.IVworkspace4);
-//        tvNoBooking = view.findViewById(R.id.TVnoBooking);
-//
-//        dbRef.orderByChild("bookingID").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(!dataSnapshot.exists()){
-//                    tvNoBooking.setText("There are currently no booking made");
-//                    btnBook.setText("Start Booking");
-//                }
-//                else {
-//                    String bookKey = dataSnapshot.getChildren().iterator().next().getKey();
-//                    dbref2 = database.getReference("/users/" + userID + "/booking/" + bookKey);
-//                    dbref2.addValueEventListener(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                            final UserBooking booking = dataSnapshot.getValue(UserBooking.class);
-//                            if (booking.getBookingStatus().equals("Completed")) {
-//                                tvNoBooking.setText("There are currently no booking made");
-//                                btnBook.setText("Start Booking");
-//                            } else {
-//                                final String workspaceKey = booking.getWorkspaceID();
-//                                dbref3 = database.getReference("/workspace/" + workspaceKey);
-//                                dbref3.addValueEventListener(new ValueEventListener() {
-//                                    @Override
-//                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                        Workspace workspace = dataSnapshot.getValue(Workspace.class);
-//                                        Glide.with(getActivity()).load(workspace.getWorkspaceImage()).into(ivWorkspace);
-//                                        tvWorkspaceName.setText(workspace.getWorkspaceName());
-//                                        tvLocation.setText(workspace.getLocation());
-//                                        tvAmenity.setText(workspace.getAmenities().getFullAmenity());
-//                                        tvBookDate.setText(booking.getBookingDate());
-//                                        tvBookTime.setText(booking.getBookStartTime() + " - " + booking.getBookEndTime());
-//                                        if (booking.getCheckInStatus().equals("0")) {
-//                                            btnBook.setText("Check In");
-//                                        } else {
-//                                            btnBook.setText("Check Out");
-//                                        }
-//                                    }
-//                                    @Override
-//                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//                                    }
-//                                });
-//                            }
-//                        }
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError databaseError) {
-//                        }
-//                    });
-//                }
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//            }
-//        });
-//
-//        btnBook.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                DialogFragment newFragment = new SelectDateFragment();
-//                newFragment.show(getFragmentManager(), "DatePicker");
-//            }
-//        });
     }
     private void fetch(){
         Query query = dbRef.orderByChild("checkOutStatus").equalTo("0");
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                total = (int) dataSnapshot.getChildrenCount();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         FirebaseRecyclerOptions<UserBooking> options =
                 new FirebaseRecyclerOptions.Builder<UserBooking>()
@@ -147,6 +123,9 @@ public class HomeFragment extends Fragment {
             }
             @Override
             protected void onBindViewHolder(@NonNull final HomeFragment.ViewHolder holder, final int position, @NonNull UserBooking userBooking) {
+                holder.setPosition(position);
+                String queue = (position+1) + " / " + total;
+                holder.setTvQueue(queue);
                 holder.setTvBookDate(userBooking.getBookingDate());
                 holder.setTvBookTime(userBooking.getBookStartTime() + " - " + userBooking.getBookEndTime());
                 if (userBooking.getCheckInStatus().equals("0")) {
@@ -177,23 +156,59 @@ public class HomeFragment extends Fragment {
     public class ViewHolder extends RecyclerView.ViewHolder{
         public LinearLayout root;
         public Button btnBook;
+        public ImageButton btnMenu;
         public ImageView ivWorkspace;
-        public TextView tvWorkspaceName, tvLocation, tvBookDate, tvBookTime, tvAmenity, tvNoBooking;
+        public TextView tvWorkspaceName, tvLocation, tvBookDate, tvBookTime, tvAmenity,tvQueue;
+        public int position;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             root = itemView.findViewById(R.id.list_root2);
             btnBook = itemView.findViewById(R.id.BtnBook);
+            btnMenu = itemView.findViewById(R.id.BtnBookingMenu);
             tvAmenity = itemView.findViewById(R.id.TVamenity4);
             tvWorkspaceName = itemView.findViewById(R.id.TVworkspaceName4);
             tvBookDate = itemView.findViewById(R.id.TVbookDate4);
             tvBookTime = itemView.findViewById(R.id.TVbookTime4);
             tvLocation = itemView.findViewById(R.id.TVlocation4);
             ivWorkspace = itemView.findViewById(R.id.IVworkspace4);
-            tvNoBooking = itemView.findViewById(R.id.TVnoBooking);
+            tvQueue = itemView.findViewById(R.id.TVqueue);
+
+            btnMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Creating the instance of PopupMenu
+                    PopupMenu popup = new PopupMenu(getActivity(), btnMenu);
+                    //Inflating the Popup using xml file
+                    popup.getMenuInflater()
+                            .inflate(R.menu.booking_menu, popup.getMenu());
+
+                    //registering popup with OnMenuItemClickListener
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()){
+                                case R.id.MenuDeleteBooking:
+                                    String bookKey = adapter.getRef(position).getKey();
+                                    Intent I = new Intent(getActivity(), DeleteBookingConfimationDialog.class);
+                                    I.putExtra("bookKey", bookKey);
+                                    startActivity(I);
+                                    return true;
+                                case R.id.MenuExtendBooking:
+                                    Toast.makeText(getActivity(), "extend booking", Toast.LENGTH_SHORT).show();
+                                    return true;
+                            }
+                          return false;
+                        }
+                    });
+                    popup.show(); //showing popup menu
+                }
+            });
         }
         public void setIvWorkspace(String  string) {
             Glide.with(getActivity()).load(string).into(ivWorkspace);
+        }
+        public void setTvQueue(String string){
+            tvQueue.setText(string);
         }
         public void setTvWorkspaceName(String string) {
             tvWorkspaceName.setText(string);
@@ -213,6 +228,10 @@ public class HomeFragment extends Fragment {
         public void setBtnBook(String string){
             btnBook.setText(string);
         }
+        public void setPosition(int x){
+            position = x;
+        }
+
     }
 
     @Override
