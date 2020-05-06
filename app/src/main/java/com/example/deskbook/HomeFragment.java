@@ -208,6 +208,7 @@ public class HomeFragment extends Fragment {
                                     j.putExtra("bookDate", bookDate);
                                     j.putExtra("bookStartTime", bookStartTime);
                                     j.putExtra("bookEndTime", bookEndTime);
+                                    j.putExtra("bookingID", adapter.getRef(position).getKey());
                                     startActivity(j);
                                     return true;
                             }

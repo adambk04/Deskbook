@@ -36,7 +36,7 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
     FirebaseUser user;
     String packageName, userID;
     String workspaceKey;
-    String workspaceID, bookDate;
+    String workspaceID, bookDate, bookingID;
     int bookStartTime, bookEndTime, check;
     public static int[] time;
 
@@ -81,6 +81,7 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
         check = intent.getIntExtra("check", 0);
         workspaceID = intent.getStringExtra("workspaceID");
         bookDate = intent.getStringExtra("bookDate");
+        bookingID = intent.getStringExtra("bookingID");
         bookStartTime = intent.getIntExtra("bookStartTime", 0);
         bookEndTime = intent.getIntExtra("bookEndTime", 0);
 
@@ -130,6 +131,12 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
                             // to make booked time slot red
                             else {
                                 Chip chip = (Chip) findViewById(getResources().getIdentifier("Chip" + x, "id", packageName));
+                                // if chip is after current user booking end time
+                                if(x.equals(Integer.toString(bookEndTime))){
+                                    chip.setError("");
+                                    btnSelectTime.setEnabled(false);
+                                    Toast.makeText(WorkspaceBookSlotActivity.this, "Booking cannot be extended", Toast.LENGTH_LONG).show();
+                                }
                                 chip.setCheckable(false);
                                 chip.setChipBackgroundColor(getResources().getColorStateList(R.color.booked));
                             }
@@ -139,6 +146,7 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
+
                 }
             });
         }
@@ -187,17 +195,20 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(check == 1){
-
-
-
-
-
-
-
-
-
-
-
+                    boolean checkError = getCheckedError();
+                    if (time[0] == 99) {
+                        Toast.makeText(WorkspaceBookSlotActivity.this, "Please Select Time Slot", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (checkError) {
+                            Intent j = new Intent(WorkspaceBookSlotActivity.this, ExtendBookingConfirmationDialog.class);
+                            j.putExtra("workspaceID", workspaceID );
+                            j.putExtra("bookDate", bookDate);
+                            j.putExtra("bookingID", bookingID   );
+                            startActivity(j);
+                        } else {
+                            Toast.makeText(WorkspaceBookSlotActivity.this, "Cant leave gap between time slot", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
                 else {
                     boolean checkError = getCheckedError();

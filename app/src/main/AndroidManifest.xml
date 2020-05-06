@@ -10,8 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ExtendBookingConfirmationDialog"
+            android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" ></activity>
+        <activity
             android:name=".DeleteBookingConfimationDialog"
-            android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert"></activity>
+            android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />
         <activity android:name=".MainFragmentActivity" />
         <activity
             android:name=".BookSlotConfirmationDialog"
@@ -33,8 +36,8 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>
