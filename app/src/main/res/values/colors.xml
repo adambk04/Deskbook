@@ -7,4 +7,5 @@
     <color name="booked">#CD5252</color>
     <color name="lightGray">#787878</color>
     <color name="lighterGray">#C5C3C3</color>
+    <color name="userBooked">#A1DDA3</color>
 </resources>

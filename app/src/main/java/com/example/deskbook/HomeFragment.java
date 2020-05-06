@@ -123,7 +123,13 @@ public class HomeFragment extends Fragment {
             }
             @Override
             protected void onBindViewHolder(@NonNull final HomeFragment.ViewHolder holder, final int position, @NonNull UserBooking userBooking) {
+
                 holder.setPosition(position);
+                holder.setWorkspaceID(userBooking.getWorkspaceID());
+                holder.setBookDate(userBooking.getBookingDate());
+                holder.setBookStartTime(Integer.parseInt((userBooking.getBookStartTime()).substring(0,2)));
+                holder.setBookEndTime(Integer.parseInt((userBooking.getBookEndTime()).substring(0,2)));
+
                 String queue = (position+1) + " / " + total;
                 holder.setTvQueue(queue);
                 holder.setTvBookDate(userBooking.getBookingDate());
@@ -159,7 +165,9 @@ public class HomeFragment extends Fragment {
         public ImageButton btnMenu;
         public ImageView ivWorkspace;
         public TextView tvWorkspaceName, tvLocation, tvBookDate, tvBookTime, tvAmenity,tvQueue;
-        public int position;
+        public int position,bookStartTime, bookEndTime;
+        public String workspaceID, bookDate;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -194,7 +202,13 @@ public class HomeFragment extends Fragment {
                                     startActivity(I);
                                     return true;
                                 case R.id.MenuExtendBooking:
-                                    Toast.makeText(getActivity(), "extend booking", Toast.LENGTH_SHORT).show();
+                                    Intent j = new Intent(getActivity(), WorkspaceBookSlotActivity.class);
+                                    j.putExtra("check", 1);
+                                    j.putExtra("workspaceID", workspaceID );
+                                    j.putExtra("bookDate", bookDate);
+                                    j.putExtra("bookStartTime", bookStartTime);
+                                    j.putExtra("bookEndTime", bookEndTime);
+                                    startActivity(j);
                                     return true;
                             }
                           return false;
@@ -231,7 +245,18 @@ public class HomeFragment extends Fragment {
         public void setPosition(int x){
             position = x;
         }
-
+        public void setWorkspaceID(String workspaceID) {
+            this.workspaceID = workspaceID;
+        }
+        public void setBookDate(String bookDate) {
+            this.bookDate = bookDate;
+        }
+        public void setBookStartTime(int bookStartTime) {
+            this.bookStartTime = bookStartTime;
+        }
+        public void setBookEndTime(int bookEndTime) {
+            this.bookEndTime = bookEndTime;
+        }
     }
 
     @Override

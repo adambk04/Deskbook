@@ -92,7 +92,7 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
                             bookEndTime = WorkspaceBookSlotActivity.time[0] + 1 + ":00";
                         }
                         else {
-                            bookEndTime = "0" + WorkspaceBookSlotActivity.time[0] + 1 + ":00";
+                            bookEndTime = "0" + (WorkspaceBookSlotActivity.time[0] + 1) + ":00";
                         }
                     }
                     else{
