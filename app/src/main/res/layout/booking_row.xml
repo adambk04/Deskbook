@@ -72,10 +72,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/IVworkspace4"
-                app:layout_constraintTop_toBottomOf="@+id/TVamenity4" />
+                app:layout_constraintBottom_toTopOf="@+id/TVbookTime4"
+                app:layout_constraintStart_toEndOf="@+id/IVworkspace4" />
 
             <TextView
                 android:id="@+id/TVbookTime4"
@@ -83,8 +82,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                app:layout_constraintStart_toEndOf="@+id/IVworkspace4"
-                app:layout_constraintTop_toBottomOf="@+id/TVbookDate4" />
+                app:layout_constraintBottom_toBottomOf="@+id/IVworkspace4"
+                app:layout_constraintStart_toEndOf="@+id/IVworkspace4" />
 
             <TextView
                 android:id="@+id/TVamenity4"
@@ -122,13 +121,27 @@
                 android:id="@+id/BtnBookingMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:layout_marginEnd="2dp"
                 android:layout_marginRight="2dp"
                 android:background="@color/design_default_color_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_more_vert_gray_24dp"
+                tools:ignore="VectorDrawableCompat" />
+
+            <ImageButton
+                android:id="@+id/BtnShareBooking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/design_default_color_background"
+                app:layout_constraintEnd_toStartOf="@+id/BtnBookingMenu"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_share_black_24dp"
+                android:visibility="gone"
                 tools:ignore="VectorDrawableCompat" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

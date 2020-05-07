@@ -50,6 +50,13 @@ public class ExtendBookingConfirmationDialog extends AppCompatActivity {
 
         tvExtension.setText(getTimeString());
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         btnExtend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

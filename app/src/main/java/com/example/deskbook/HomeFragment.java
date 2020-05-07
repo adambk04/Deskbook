@@ -149,6 +149,9 @@ public class HomeFragment extends Fragment {
                         holder.setTvWorkspaceName(workspace.getWorkspaceName());
                         holder.setTvLocation(workspace.getLocation());
                         holder.setTvAmenities(workspace.getAmenities().getFullAmenity());
+                        if(workspace.getWorkspaceType().equals("Meeting Room")){
+                            holder.setBtnShare();
+                        }
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -162,7 +165,7 @@ public class HomeFragment extends Fragment {
     public class ViewHolder extends RecyclerView.ViewHolder{
         public LinearLayout root;
         public Button btnBook;
-        public ImageButton btnMenu;
+        public ImageButton btnMenu, btnShare;
         public ImageView ivWorkspace;
         public TextView tvWorkspaceName, tvLocation, tvBookDate, tvBookTime, tvAmenity,tvQueue;
         public int position,bookStartTime, bookEndTime;
@@ -174,6 +177,7 @@ public class HomeFragment extends Fragment {
             root = itemView.findViewById(R.id.list_root2);
             btnBook = itemView.findViewById(R.id.BtnBook);
             btnMenu = itemView.findViewById(R.id.BtnBookingMenu);
+            btnShare = itemView.findViewById(R.id.BtnShareBooking);
             tvAmenity = itemView.findViewById(R.id.TVamenity4);
             tvWorkspaceName = itemView.findViewById(R.id.TVworkspaceName4);
             tvBookDate = itemView.findViewById(R.id.TVbookDate4);
@@ -257,6 +261,9 @@ public class HomeFragment extends Fragment {
         }
         public void setBookEndTime(int bookEndTime) {
             this.bookEndTime = bookEndTime;
+        }
+        public void setBtnShare(){
+            btnShare.setVisibility(View.VISIBLE);
         }
     }
 

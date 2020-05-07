@@ -116,10 +116,8 @@ public class MainFragmentActivity extends AppCompatActivity implements BottomNav
         int id = item.getItemId();
 
         if (id == R.id.MenuLogout) {
-            FirebaseAuth.getInstance().signOut();
-            Intent I = new Intent(MainFragmentActivity.this, LoginActivity.class);
+            Intent I = new Intent(MainFragmentActivity.this, LogoutConfirmationDialog.class);
             startActivity(I);
-            finish();
         }
         return super.onOptionsItemSelected(item);
     }

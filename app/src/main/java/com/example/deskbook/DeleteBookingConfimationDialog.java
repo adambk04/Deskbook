@@ -46,6 +46,13 @@ public class DeleteBookingConfimationDialog extends AppCompatActivity {
         btnDelete = findViewById(R.id.BtnDeleteBooking);
         btnCancel = findViewById(R.id.BtnCancelDelete);
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
