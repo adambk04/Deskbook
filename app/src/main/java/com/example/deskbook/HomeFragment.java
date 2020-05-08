@@ -215,6 +215,11 @@ public class HomeFragment extends Fragment {
                                     j.putExtra("bookingID", adapter.getRef(position).getKey());
                                     startActivity(j);
                                     return true;
+                                case R.id.MenuMakeReport:
+                                    Intent x = new Intent(getActivity(), MakeReportActivity.class);
+                                    x.putExtra("workspaceName", tvWorkspaceName.getText());
+                                    startActivity(x);
+                                    return true;
                             }
                           return false;
                         }

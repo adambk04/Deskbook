@@ -6,4 +6,7 @@
     <item
         android:id="@+id/MenuDeleteBooking"
         android:title="Delete Booking" />
+    <item
+        android:id="@+id/MenuMakeReport"
+        android:title="Make Report" />
 </menu>
