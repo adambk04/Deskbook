@@ -129,7 +129,7 @@ public class SetupProfileActivity extends AppCompatActivity {
             });
         }
         else {
-            Glide.with(getApplicationContext()).load("https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/ProfilePictures%2FdefaultImage.png?alt=media&token=9cd07814-6faf-4f5a-81f1-7faf307b25f0").apply(RequestOptions.circleCropTransform()).into(ivProfile);
+            Glide.with(getApplicationContext()).load("https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/ProfilePictures%2FdefaultImage.png?alt=media&token=9295ac17-274f-43ae-a05b-9887d3f4dfa1").apply(RequestOptions.circleCropTransform()).into(ivProfile);
         }
 
         rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -243,7 +243,7 @@ public class SetupProfileActivity extends AppCompatActivity {
 //                startActivity(I);
             }
             else {
-                String pictureUrl = "https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/ProfilePictures%2FdefaultImage.png?alt=media&token=9cd07814-6faf-4f5a-81f1-7faf307b25f0";
+                String pictureUrl = "https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/ProfilePictures%2FdefaultImage.png?alt=media&token=9295ac17-274f-43ae-a05b-9887d3f4dfa1";
                 String pictureName = "ProfilePictures/defaultImage.png";
                 storeUser(pictureUrl, pictureName);
                 Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);

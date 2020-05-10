@@ -129,6 +129,7 @@ public class HomeFragment extends Fragment {
                 holder.setBookDate(userBooking.getBookingDate());
                 holder.setBookStartTime(Integer.parseInt((userBooking.getBookStartTime()).substring(0,2)));
                 holder.setBookEndTime(Integer.parseInt((userBooking.getBookEndTime()).substring(0,2)));
+                holder.setBookingTime(userBooking.getBookStartTime());
 
                 String queue = (position+1) + " / " + total;
                 holder.setTvQueue(queue);
@@ -169,7 +170,7 @@ public class HomeFragment extends Fragment {
         public ImageView ivWorkspace;
         public TextView tvWorkspaceName, tvLocation, tvBookDate, tvBookTime, tvAmenity,tvQueue;
         public int position,bookStartTime, bookEndTime;
-        public String workspaceID, bookDate;
+        public String workspaceID, bookDate, bookingTime;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -227,6 +228,19 @@ public class HomeFragment extends Fragment {
                     popup.show(); //showing popup menu
                 }
             });
+
+            btnShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent x = new Intent(getActivity(), InviteToWorkspaceDialog.class);
+                    x.putExtra("workspaceName", tvWorkspaceName.getText());
+                    x.putExtra("bookDate", bookDate);
+                    x.putExtra("bookingTime", bookingTime);
+                    x.putExtra("bookingID", adapter.getRef(position).getKey());
+                    startActivity(x);
+                }
+            });
+
         }
         public void setIvWorkspace(String  string) {
             Glide.with(getActivity()).load(string).into(ivWorkspace);
@@ -270,6 +284,10 @@ public class HomeFragment extends Fragment {
         public void setBtnShare(){
             btnShare.setVisibility(View.VISIBLE);
         }
+        public void setBookingTime(String bookingTime) {
+            this.bookingTime = bookingTime;
+        }
+
     }
 
     @Override

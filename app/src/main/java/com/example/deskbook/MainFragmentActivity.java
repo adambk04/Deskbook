@@ -98,6 +98,9 @@ public class MainFragmentActivity extends AppCompatActivity implements BottomNav
             case R.id.MenuHistory:
                 fragment = new HistoryFragment();
                 break;
+            case R.id.MenuNotification:
+                fragment = new NotificationFragment();
+                break;
             case R.id.MenuProfile:
                 fragment = new ProfileFragment();
                 break;

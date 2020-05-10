@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if (!task.isSuccessful()) {
-                                Toast.makeText(LoginActivity.this, "Not successful", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Incorrect Login Credential", Toast.LENGTH_SHORT).show();
                             } else {
                                 Intent I = new Intent(LoginActivity.this, MainFragmentActivity.class);
                                 I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

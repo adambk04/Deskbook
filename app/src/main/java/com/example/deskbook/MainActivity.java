@@ -31,14 +31,15 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     public Button btnSignUp;
-    public EditText etEmail, etPassword, etPasscode;
+    public EditText etEmail, etPassword, etPasscode, etRetype;
     public TextView tvSignIn;
     FirebaseAuth firebaseAuth;
     FirebaseDatabase database;
     DatabaseReference dbRef;
     FirebaseUser user;
     private FirebaseAuth.AuthStateListener authStateListener;
-    String code, passcode, email , password, email2;
+    String code, passcode, email , password, email2, retype;
+    int error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.BtnSignup);
         etEmail = findViewById(R.id.ETemail);
         etPassword = findViewById(R.id.ETpassword);
+        etRetype = findViewById(R.id.ETretypePassword);
         etPasscode = findViewById(R.id.ETpasscode);
         tvSignIn = findViewById(R.id.TVsignIn);
         etEmail.requestFocus();
@@ -66,19 +68,25 @@ public class MainActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                error = 0;
                 email = etEmail.getText().toString();
                 password = etPassword.getText().toString();
                 passcode = etPasscode.getText().toString();
+                retype = etRetype.getText().toString();
                 if (email.isEmpty()) {
                     etEmail.setError("Provide your Email first!");
                     etEmail.requestFocus();
                 } else if (password.isEmpty()) {
                     etPassword.setError("Set your password");
                     etPassword.requestFocus();
-                } else if (passcode.isEmpty()){
+                } else if (passcode.isEmpty()) {
                     etPasscode.setError("Employee ID empty");
                     etPasscode.requestFocus();
-                } else if (email.isEmpty() && password.isEmpty() && passcode.isEmpty()) {
+                } else if (!retype.equals(password)){
+                    etRetype.setError("Retype does not match");
+                    etRetype.requestFocus();
+                    error = 1;
+                } else if (email.isEmpty() && password.isEmpty() && passcode.isEmpty() && error != 1) {
                     Toast.makeText(MainActivity.this, "Fields Empty!", Toast.LENGTH_SHORT).show();
                 } else if (!(email.isEmpty() && password.isEmpty() && passcode.isEmpty())) {
                     Query query = dbRef.orderByChild("code").equalTo(passcode);
