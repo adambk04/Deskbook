@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,17 +29,19 @@ public class MainFragmentActivity extends AppCompatActivity implements BottomNav
 
     public static String bookDate;
     FirebaseDatabase database;
-    DatabaseReference dbRef;
+    DatabaseReference dbRef, dbRef2;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
     String userID;
+    BadgeDrawable badgeDrawable;
+    BottomNavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_fragment);
 
-        BottomNavigationView navigationView = findViewById(R.id.Bottom_Navigation);
+        navigationView = findViewById(R.id.Bottom_Navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
 
         Toolbar toolbar = findViewById(R.id.topAppBar);
@@ -50,6 +53,8 @@ public class MainFragmentActivity extends AppCompatActivity implements BottomNav
 
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/users/" + userID);
+        dbRef2 = database.getReference("/users/" + userID + "/invites");
+
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -58,6 +63,25 @@ public class MainFragmentActivity extends AppCompatActivity implements BottomNav
                     Intent I = new Intent(MainFragmentActivity.this, SetupProfileActivity.class);
                     startActivity(I);
                     finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        dbRef2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    badgeDrawable = navigationView.getOrCreateBadge(R.id.MenuNotification);
+                    badgeDrawable.setVisible(true);
+                }
+                else{
+                    badgeDrawable = navigationView.getOrCreateBadge(R.id.MenuNotification);
+                    badgeDrawable.setVisible(false);
                 }
             }
 

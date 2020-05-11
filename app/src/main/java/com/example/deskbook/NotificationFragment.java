@@ -103,7 +103,7 @@ public class NotificationFragment extends Fragment {
                 return new NotificationFragment.ViewHolder(view);
             }
             @Override
-            protected void onBindViewHolder(@NonNull final NotificationFragment.ViewHolder holder, final int position, @NonNull Invites invite) {
+            protected void onBindViewHolder(@NonNull final NotificationFragment.ViewHolder holder, final int position, @NonNull final Invites invite) {
 
                 holder.setIvWorkspace(invite.getProfilePicture());
                 String text = "<b>" + invite.getUserName() + "</b>" + " invited you to join " + "<b>" + invite.getWorkspaceName() + "</b>" +
@@ -112,11 +112,12 @@ public class NotificationFragment extends Fragment {
                 holder.root.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String inviteKey = adapter.getRef(position).getKey();
-//                        Intent I = new Intent(getActivity(), WorkspaceBookSlotActivity.class);
-//                        I.putExtra("inviteKey", inviteKey);
-//                        startActivity(I);
-                        Toast.makeText(getActivity(), inviteKey, Toast.LENGTH_SHORT).show();
+                        String inviteID = adapter.getRef(position).getKey();
+                        Intent I = new Intent(getActivity(), AcceptInvitationDialog.class);
+                        I.putExtra("bookingID", invite.getBookingID());
+                        I.putExtra("fromUserID", invite.getFromUserID());
+                        I.putExtra("inviteID", inviteID);
+                        startActivity(I);
                     }
                 });
 
