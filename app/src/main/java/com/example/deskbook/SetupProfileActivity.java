@@ -15,11 +15,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -40,7 +42,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -51,6 +55,7 @@ public class SetupProfileActivity extends AppCompatActivity {
     public EditText etName, etDepartment, etPhoneNum;
     public RadioGroup rgGender;
     public RadioButton rbMale, rbFemale;
+    public Spinner spinnerDept;
     Uri filePath;
     String gender;
     int check;
@@ -59,9 +64,11 @@ public class SetupProfileActivity extends AppCompatActivity {
     StorageReference storageReference;
     FirebaseUser user;
     FirebaseDatabase database;
-    DatabaseReference dbRef;
+    DatabaseReference dbRef, dbRef2;
     FragmentManager fragmentManager;
     String userID;
+    List<String> departmentList;
+    ArrayAdapter<String> departmentAdapter;
 
 
     @Override
@@ -77,6 +84,9 @@ public class SetupProfileActivity extends AppCompatActivity {
             }
         });
 
+        Intent intent = getIntent();
+        check = intent.getIntExtra("check",0);
+
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
@@ -87,12 +97,13 @@ public class SetupProfileActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/users/"+userID);
+        dbRef2 = database.getReference("/departments/");
 
         ivProfile = findViewById(R.id.IVprofile);
         btnSaveProfile = findViewById(R.id.BTNsaveProfile);
         btnPicture = findViewById(R.id.BTNpicture);
         etName = findViewById(R.id.ETname);
-        etDepartment = findViewById(R.id.ETdepartment);
+        spinnerDept = findViewById(R.id.SpinnerDepartment);
         etPhoneNum = findViewById(R.id.ETphoneNum);
         rgGender = findViewById(R.id.RGgender);
         rbMale = findViewById(R.id.RBmale);
@@ -100,37 +111,61 @@ public class SetupProfileActivity extends AppCompatActivity {
 
         filePath = null;
 
-        Intent intent = getIntent();
-        check = intent.getIntExtra("check",0);
-        if(check == 1){
-            dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    User users = dataSnapshot.getValue(User.class);
-                    etName.setText(users.getName());
-                    etDepartment.setText(users.getDepartment());
-                    etPhoneNum.setText(users.getPhone());
-                    String g = users.getGender();
-                    if(g.equals("Male")){
-                        rbMale.setChecked(true);
-                        gender = "Male";
+        //populate department spinner
+        dbRef2.orderByChild("department").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                departmentList = new ArrayList<String>();
+
+                for (DataSnapshot departmentSnapshot: dataSnapshot.getChildren()) {
+                    String department = departmentSnapshot.child("department").getValue(String.class);
+                    if (department!=null){
+                        departmentList.add(department);
                     }
-                    else {
-                        rbFemale.setChecked(true);
-                        gender = "Female";
-                    }
-                    String profilePicUrl = users.getProfilePic();
+                }
+
+                departmentAdapter = new ArrayAdapter<String>(SetupProfileActivity.this, android.R.layout.simple_spinner_item, departmentList);
+                departmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerDept.setAdapter(departmentAdapter);
+
+                if(check == 1){
+                    dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            User users = dataSnapshot.getValue(User.class);
+                            etName.setText(users.getName());
+                            String dept = users.getDepartment();
+                            int spinnerPosition = departmentAdapter.getPosition(dept);
+                            spinnerDept.setSelection(spinnerPosition);
+                            etPhoneNum.setText(users.getPhone());
+                            String g = users.getGender();
+                            if(g.equals("Male")){
+                                rbMale.setChecked(true);
+                                gender = "Male";
+                            }
+                            else {
+                                rbFemale.setChecked(true);
+                                gender = "Female";
+                            }
+                            String profilePicUrl = users.getProfilePic();
 //                    Glide.with(getApplicationContext()).load(profilePicUrl).into(ivProfile);
-                    Glide.with(getApplicationContext()).load(profilePicUrl).apply(RequestOptions.circleCropTransform()).into(ivProfile);
+                            Glide.with(getApplicationContext()).load(profilePicUrl).apply(RequestOptions.circleCropTransform()).into(ivProfile);
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
                 }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                else {
+                    Glide.with(getApplicationContext()).load("https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/ProfilePictures%2FdefaultImage.png?alt=media&token=9295ac17-274f-43ae-a05b-9887d3f4dfa1").apply(RequestOptions.circleCropTransform()).into(ivProfile);
                 }
-            });
-        }
-        else {
-            Glide.with(getApplicationContext()).load("https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/ProfilePictures%2FdefaultImage.png?alt=media&token=9295ac17-274f-43ae-a05b-9887d3f4dfa1").apply(RequestOptions.circleCropTransform()).into(ivProfile);
-        }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -161,6 +196,8 @@ public class SetupProfileActivity extends AppCompatActivity {
         btnSaveProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                String dept = String.valueOf(spinnerDept.getSelectedItem());
+//                Toast.makeText(SetupProfileActivity.this, dept, Toast.LENGTH_SHORT).show();
                 uploadImage();
             }
         });
@@ -233,7 +270,7 @@ public class SetupProfileActivity extends AppCompatActivity {
         else{
             if(check == 1) {
                 updateUserWithoutImgChange();
-                Toast.makeText(SetupProfileActivity.this, "UserUpdated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SetupProfileActivity.this, "User Updated", Toast.LENGTH_SHORT).show();
                 finish();
 //                Intent I = new Intent(SetupProfileActivity.this, MainFragmentActivity.class);
 //                I.putExtra("check", 1);
@@ -264,7 +301,7 @@ public class SetupProfileActivity extends AppCompatActivity {
     private void storeUser(String pictureUrl, String pictureName){
         String name = etName.getText().toString().trim();
         String email = user.getEmail();
-        String department = etDepartment.getText().toString().trim();
+        String department = String.valueOf(spinnerDept.getSelectedItem());
         String phoneNum = etPhoneNum.getText().toString().trim();
         User user = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName, "0");
         dbRef.setValue(user);
@@ -273,7 +310,7 @@ public class SetupProfileActivity extends AppCompatActivity {
     private void updateUser(String pictureUrl, String pictureName){
         String name = etName.getText().toString().trim();
         String email = user.getEmail();
-        String department = etDepartment.getText().toString().trim();
+        String department = String.valueOf(spinnerDept.getSelectedItem());
         String phoneNum = etPhoneNum.getText().toString().trim();
         User users = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName, "0");
         Map<String, Object> userValues = users.toMap();
@@ -290,7 +327,7 @@ public class SetupProfileActivity extends AppCompatActivity {
                 String picUrl = users.getProfilePic();
                 String name = etName.getText().toString().trim();
                 String email = user.getEmail();
-                String department = etDepartment.getText().toString().trim();
+                String department = String.valueOf(spinnerDept.getSelectedItem());
                 String phoneNum = etPhoneNum.getText().toString().trim();
                 User user = new User(name, email, department, phoneNum, gender, picUrl, picName, "0");
                 Map<String, Object> userValues = user.toMap();
