@@ -33,6 +33,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 
 public class HomeFragment extends Fragment {
@@ -47,6 +49,8 @@ public class HomeFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
     String userID;
+    String qrString;
+    String workspaceKey;
     int total;
 
     @Nullable
@@ -241,6 +245,25 @@ public class HomeFragment extends Fragment {
                 }
             });
 
+            btnBook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(btnBook.getText().toString().equals("Check In")){
+                        workspaceKey = workspaceID;
+                        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(HomeFragment.this);
+                        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+                        integrator.setPrompt("Scan");
+                        integrator.setCameraId(0);
+                        integrator.setBeepEnabled(false);
+                        integrator.setBarcodeImageEnabled(false);
+                        integrator.initiateScan();
+                    }
+                    else{
+                        Toast.makeText(getActivity(), "check Out function", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
         }
         public void setIvWorkspace(String  string) {
             Glide.with(getActivity()).load(string).into(ivWorkspace);
@@ -300,5 +323,26 @@ public class HomeFragment extends Fragment {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(getActivity(), "You cancelled the scanning", Toast.LENGTH_SHORT).show();
+            } else {
+                qrString = result.getContents();
+                if(qrString.equals(workspaceKey)){
+                    Toast.makeText(getActivity(), "check in successful", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getActivity(), "check in failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }
