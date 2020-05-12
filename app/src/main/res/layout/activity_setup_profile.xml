@@ -6,50 +6,43 @@
     android:layout_height="match_parent"
     tools:context=".SetupProfileActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/Toolbar3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/LightWhite"
-        android:elevation="4dp"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="?attr/homeAsUpIndicator"
-        app:title="@string/app_name"
-        app:titleTextColor="@color/colorAccent" />
-
-    <EditText
-        android:id="@+id/ETphoneNum"
+    <Button
+        android:id="@+id/BTNpicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Change Picture"
+        app:layout_constraintEnd_toEndOf="@+id/IVprofile"
+        app:layout_constraintStart_toStartOf="@+id/IVprofile"
+        app:layout_constraintTop_toBottomOf="@+id/IVprofile" />
+
+    <Button
+        android:id="@+id/BTNsaveProfile"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/IVprofile"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
         android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Phone Number"
-        android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SpinnerDepartment" />
-
-    <EditText
-        android:id="@+id/ETname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="Name"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BTNpicture" />
+        app:layout_constraintTop_toBottomOf="@+id/Toolbar3" />
 
     <RadioGroup
         android:id="@+id/RGgender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/BTNsaveProfile"
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3">
 
@@ -66,66 +59,102 @@
             android:text="Female" />
     </RadioGroup>
 
-    <ImageView
-        android:id="@+id/IVprofile"
-        android:layout_width="150dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Toolbar3" />
-
-    <Button
-        android:id="@+id/BTNpicture"
-        android:layout_width="wrap_content"
+    <Spinner
+        android:id="@+id/SpinnerDepartment"
+        style="@style/Platform.Widget.AppCompat.Spinner"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Change Picture"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/IVprofile" />
+        android:spinnerMode="dialog"
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintEnd_toEndOf="@+id/textFieldPhone"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/textView9"
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="Gender"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/ETphoneNum"
-        app:layout_constraintTop_toBottomOf="@+id/ETphoneNum" />
-
-    <Button
-        android:id="@+id/BTNsaveProfile"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Spinner
-        android:id="@+id/SpinnerDepartment"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dialog"
-        app:layout_constraintEnd_toEndOf="@+id/ETname"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/ETname"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintBottom_toTopOf="@+id/RGgender"
+        app:layout_constraintStart_toStartOf="@+id/textFieldPhone"
+        app:layout_constraintTop_toBottomOf="@+id/SpinnerDepartment" />
 
     <TextView
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="Department"
-        app:layout_constraintStart_toStartOf="@+id/SpinnerDepartment"
-        app:layout_constraintTop_toBottomOf="@+id/ETname" />
+        app:layout_constraintBottom_toTopOf="@+id/SpinnerDepartment"
+        app:layout_constraintStart_toStartOf="@+id/textFieldPhone"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldPhone" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/Toolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/LightWhite"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:title="@string/app_name"
+        app:titleTextColor="@color/colorAccent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldPhone"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:hint="Phone Number"
+        app:layout_constraintBottom_toTopOf="@+id/textView9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldName"
+        app:startIconDrawable="@drawable/ic_local_phone_black_24dp">
+
+        <EditText
+            android:id="@+id/ETphoneNum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="phone" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldName"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:hint="Name"
+        app:layout_constraintBottom_toTopOf="@+id/textFieldPhone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BTNpicture"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:startIconDrawable="@drawable/ic_person_black_24dp">
+
+        <EditText
+            android:id="@+id/ETname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

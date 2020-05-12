@@ -4,11 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="410dp"
+    android:layout_marginLeft="8dp"
     android:layout_marginTop="4dp"
+    android:layout_marginRight="8dp"
     android:layout_marginBottom="4dp"
-    android:layout_marginLeft="6dp"
-    android:layout_marginRight="6dp"
     android:elevation="4dp"
     tools:layout_editor_absoluteX="8dp"
     tools:layout_editor_absoluteY="8dp">
@@ -33,15 +33,69 @@
                 android:layout_marginRight="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/IVworkspace4" />
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageButton
+                android:id="@+id/BtnBookingMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:background="@color/design_default_color_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_more_vert_gray_24dp"
+                tools:ignore="VectorDrawableCompat" />
+
+            <ImageButton
+                android:id="@+id/BtnShareBooking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/design_default_color_background"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/BtnBookingMenu"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_share_black_24dp"
+                tools:ignore="VectorDrawableCompat" />
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@color/design_default_color_background"
+                app:layout_constraintBottom_toBottomOf="@+id/TVbookDate4"
+                app:layout_constraintEnd_toStartOf="@+id/TVbookDate4"
+                app:layout_constraintTop_toTopOf="@+id/TVbookDate4"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_date_range_black_24dp"
+                tools:ignore="VectorDrawableCompat" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@color/design_default_color_background"
+                app:layout_constraintBottom_toBottomOf="@+id/TVworkspaceName4"
+                app:layout_constraintEnd_toStartOf="@+id/TVworkspaceName4"
+                app:layout_constraintTop_toTopOf="@+id/TVworkspaceName4"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_work_black_24dp"
+                tools:ignore="VectorDrawableCompat" />
 
             <ImageView
                 android:id="@+id/IVworkspace4"
-                android:layout_width="150dp"
-                android:layout_height="120dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_width="300dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/TVqueue"
                 tools:src="@tools:sample/avatars" />
@@ -50,48 +104,57 @@
                 android:id="@+id/TVworkspaceName4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:textSize="14sp"
+                android:layout_marginTop="8dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/IVworkspace4"
-                app:layout_constraintTop_toTopOf="@+id/IVworkspace4" />
+                app:layout_constraintBottom_toTopOf="@+id/TVlocation4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/IVworkspace4"
+                app:layout_constraintVertical_chainStyle="packed" />
 
             <TextView
                 android:id="@+id/TVlocation4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintStart_toEndOf="@+id/IVworkspace4"
+                app:layout_constraintBottom_toTopOf="@+id/TVamenity4"
+                app:layout_constraintEnd_toEndOf="@+id/TVworkspaceName4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/TVworkspaceName4"
                 app:layout_constraintTop_toBottomOf="@+id/TVworkspaceName4" />
 
             <TextView
                 android:id="@+id/TVbookDate4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/TVbookTime4"
-                app:layout_constraintStart_toEndOf="@+id/IVworkspace4" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TVamenity4" />
 
             <TextView
                 android:id="@+id/TVbookTime4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/IVworkspace4"
-                app:layout_constraintStart_toEndOf="@+id/IVworkspace4" />
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/BtnBook"
+                app:layout_constraintEnd_toEndOf="@+id/TVbookDate4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/TVbookDate4"
+                app:layout_constraintTop_toBottomOf="@+id/TVbookDate4" />
 
             <TextView
                 android:id="@+id/TVamenity4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintStart_toEndOf="@+id/IVworkspace4"
+                android:gravity="center_horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/TVbookDate4"
+                app:layout_constraintEnd_toEndOf="@+id/TVworkspaceName4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/TVworkspaceName4"
                 app:layout_constraintTop_toBottomOf="@+id/TVlocation4" />
 
             <TextView
@@ -116,33 +179,6 @@
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-            <ImageButton
-                android:id="@+id/BtnBookingMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginRight="2dp"
-                android:background="@color/design_default_color_background"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_more_vert_gray_24dp"
-                tools:ignore="VectorDrawableCompat" />
-
-            <ImageButton
-                android:id="@+id/BtnShareBooking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@color/design_default_color_background"
-                app:layout_constraintEnd_toStartOf="@+id/BtnBookingMenu"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_share_black_24dp"
-                android:visibility="gone"
-                tools:ignore="VectorDrawableCompat" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

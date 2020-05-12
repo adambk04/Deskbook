@@ -39,7 +39,7 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
         } else {
             month2 = Integer.toString(month);
         }
-        MainFragmentActivity.bookDate = year + "-" + month2 + "-" + day2;
+        MainFragmentActivity.bookDate = day2 + "/" + month2 + "/" + year;
         Intent I = new Intent(getActivity().getApplicationContext(), SortWorkspaceDialog.class);
         startActivity(I);
     }
