@@ -127,7 +127,7 @@ public class SetupProfileActivity extends AppCompatActivity {
                 departmentAdapter = new ArrayAdapter<String>(SetupProfileActivity.this, android.R.layout.simple_spinner_item, departmentList);
                 departmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerDept.setAdapter(departmentAdapter);
-
+                // check if intent came from edit profile activity
                 if(check == 1){
                     dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -303,19 +303,30 @@ public class SetupProfileActivity extends AppCompatActivity {
         String email = user.getEmail();
         String department = String.valueOf(spinnerDept.getSelectedItem());
         String phoneNum = etPhoneNum.getText().toString().trim();
-        User user = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName, "0");
+        User user = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName, "0","0");
         dbRef.setValue(user);
     }
 
-    private void updateUser(String pictureUrl, String pictureName){
-        String name = etName.getText().toString().trim();
-        String email = user.getEmail();
-        String department = String.valueOf(spinnerDept.getSelectedItem());
-        String phoneNum = etPhoneNum.getText().toString().trim();
-        User users = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName, "0");
-        Map<String, Object> userValues = users.toMap();
-        dbRef.updateChildren(userValues);
-        finish();
+    private void updateUser(final String pictureUrl, final String pictureName){
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                String name = etName.getText().toString().trim();
+                String email = user.getEmail();
+                String department = String.valueOf(spinnerDept.getSelectedItem());
+                String phoneNum = etPhoneNum.getText().toString().trim();
+                String blockStatus = user.getBlockStatus();
+                User users = new User(name, email, department, phoneNum, gender, pictureUrl, pictureName, "0", blockStatus);
+                Map<String, Object> userValues = users.toMap();
+                dbRef.updateChildren(userValues);
+                finish();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
     }
 
     private void updateUserWithoutImgChange(){
@@ -329,7 +340,8 @@ public class SetupProfileActivity extends AppCompatActivity {
                 String email = user.getEmail();
                 String department = String.valueOf(spinnerDept.getSelectedItem());
                 String phoneNum = etPhoneNum.getText().toString().trim();
-                User user = new User(name, email, department, phoneNum, gender, picUrl, picName, "0");
+                String blockStatus = users.getBlockStatus();
+                User user = new User(name, email, department, phoneNum, gender, picUrl, picName, "0", blockStatus);
                 Map<String, Object> userValues = user.toMap();
                 dbRef.updateChildren(userValues);
             }

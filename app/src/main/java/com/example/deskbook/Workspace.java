@@ -10,18 +10,20 @@ public class Workspace {
     private String workspaceID;
     private String location;
     private Amenities amenities;
+    private String blockStatus;
 
     public Workspace(){
 
     }
 
-    public Workspace(String workspaceName, String workspaceType, String workspaceImage, String workspaceID, String location, Amenities amenities) {
+    public Workspace(String workspaceName, String workspaceType, String workspaceImage, String workspaceID, String location, Amenities amenities, String blockStatus) {
         this.workspaceName = workspaceName;
         this.workspaceType = workspaceType;
         this.workspaceImage = workspaceImage;
         this.workspaceID = workspaceID;
         this.location = location;
         this.amenities = amenities;
+        this.blockStatus = blockStatus;
     }
 
     public String getWorkspaceName() {
@@ -42,6 +44,10 @@ public class Workspace {
 
     public String getLocation() {
         return location;
+    }
+
+    public String getBlockStatus(){
+        return blockStatus;
     }
 
     public Amenities getAmenities(){

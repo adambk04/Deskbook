@@ -16,13 +16,15 @@ public class User {
     private String profilePic;
     private String pictureName;
     private String userLevel;
+    private String blockStatus;
+
     public Map<String, Boolean> stars = new HashMap<>();
 
     public User(){
 
     }
 
-    public User(String name, String email, String department, String phone, String gender, String profilePic, String pictureName, String userLevel){
+    public User(String name, String email, String department, String phone, String gender, String profilePic, String pictureName, String userLevel, String blockStatus){
         this.name = name;
         this.email = email;
         this.department = department;
@@ -31,6 +33,7 @@ public class User {
         this.profilePic = profilePic;
         this.pictureName = pictureName;
         this.userLevel = userLevel;
+        this.blockStatus = blockStatus;
     }
 
     public String getName(){
@@ -57,6 +60,7 @@ public class User {
     public String getUserLevel() {
         return userLevel;
     }
+    public String getBlockStatus(){ return blockStatus;}
 
     @Exclude
     public Map<String, Object> toMap() {

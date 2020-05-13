@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -133,23 +134,28 @@ public class WorkspaceListActivity extends AppCompatActivity {
 
                 @Override
                 protected void onBindViewHolder(ViewHolder holder, final int position, Workspace workspace) {
-                    holder.setTvWorkspaceName(workspace.getWorkspaceName());
-                    holder.setTvLocation(workspace.getLocation());
-                    holder.setIvWorkspace(workspace.getWorkspaceImage());
-                    holder.setTvAmenities(workspace.getAmenities().getFullAmenity());
+                    if(workspace.getBlockStatus().equals("0")) {
 
-                    holder.root.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-    //                        Toast.makeText(WorkspaceListActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
-                            String workspaceKey = adapter.getRef(position).getKey();
-                            Intent I = new Intent(WorkspaceListActivity.this, WorkspaceBookSlotActivity.class);
-                            I.putExtra("key", workspaceKey);
-                            startActivity(I);
-                        }
-                    });
+                        holder.setTvWorkspaceName(workspace.getWorkspaceName());
+                        holder.setTvLocation(workspace.getLocation());
+                        holder.setIvWorkspace(workspace.getWorkspaceImage());
+                        holder.setTvAmenities(workspace.getAmenities().getFullAmenity());
+
+                        holder.root.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //                        Toast.makeText(WorkspaceListActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                                String workspaceKey = adapter.getRef(position).getKey();
+                                Intent I = new Intent(WorkspaceListActivity.this, WorkspaceBookSlotActivity.class);
+                                I.putExtra("key", workspaceKey);
+                                startActivity(I);
+                            }
+                        });
+                    }
+                    else{
+                        holder.setCvWorkspaceGone();
+                    }
                 }
-
             };
             workspaceList.setAdapter(adapter);
         }
@@ -160,6 +166,7 @@ public class WorkspaceListActivity extends AppCompatActivity {
             public TextView tvLocation;
             public TextView tvAmenities;
             public ImageView ivWorkspace;
+            public CardView cvWorkspace;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -168,6 +175,7 @@ public class WorkspaceListActivity extends AppCompatActivity {
                 tvLocation = itemView.findViewById(R.id.TVlocation);
                 tvAmenities = itemView.findViewById(R.id.TVamenity);
                 ivWorkspace = itemView.findViewById(R.id.IVworkspace);
+                cvWorkspace = itemView.findViewById(R.id.CVworkspaceRow);
             }
 
             public void setTvWorkspaceName(String string1) {
@@ -184,6 +192,9 @@ public class WorkspaceListActivity extends AppCompatActivity {
 
             public void setIvWorkspace(String  string4) {
                 Glide.with(getApplicationContext()).load(string4).into(ivWorkspace);
+            }
+            public void setCvWorkspaceGone(){
+                cvWorkspace.setVisibility(View.GONE);
             }
         }
 

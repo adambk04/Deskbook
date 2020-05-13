@@ -131,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         String codeKey = dataSnapshot.getChildren().iterator().next().getKey();
                                         dbRef.child(codeKey).child("email").setValue(email);
+                                        Toast.makeText(MainActivity.this.getApplicationContext(),
+                                                "SignUp successful",
+                                                Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override

@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
     LinearLayoutManager linearLayoutManager;
     FirebaseDatabase database;
     FirebaseRecyclerAdapter adapter;
-    DatabaseReference dbRef,dbref2;
+    DatabaseReference dbRef,dbref2, dbRef3;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
     String userID;
@@ -67,14 +67,32 @@ public class HomeFragment extends Fragment {
 
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/users/" + userID + "/booking");
+        dbRef3 = database.getReference("/users/" + userID );
 
         cvStartBooking = view.findViewById(R.id.CVstartBooking);
         btnStartBooking = view.findViewById(R.id.BtnStartBooking);
+
         btnStartBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new SelectDateFragment();
-                newFragment.show(getFragmentManager(), "DatePicker");
+                dbRef3.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        if(user.getBlockStatus().equals("0")){
+                            DialogFragment newFragment = new SelectDateFragment();
+                            newFragment.show(getFragmentManager(), "DatePicker");
+                        }
+                        else {
+                            btnStartBooking.setBackgroundColor(getResources().getColor(R.color.design_default_color_error));
+                            Toast.makeText(getActivity(), "You are blocked from Booking", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
