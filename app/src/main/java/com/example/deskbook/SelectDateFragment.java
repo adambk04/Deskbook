@@ -5,15 +5,22 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.ImageDecoder;
+import android.os.Build;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+    Button btnOk;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -25,8 +32,9 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
     }
 
     public void onDateSet(DatePicker view, int yy, int mm, int dd) {
-        populateSetDate(yy, mm+1, dd);
+        populateSetDate(yy, mm + 1, dd);
     }
+
     public void populateSetDate(int year, int month, int day) {
         String month2, day2;
         if (day < 10) {
@@ -40,9 +48,18 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
             month2 = Integer.toString(month);
         }
         MainFragmentActivity.bookDate = day2 + "/" + month2 + "/" + year;
-        Intent I = new Intent(getActivity().getApplicationContext(), SortWorkspaceDialog.class);
-        startActivity(I);
+        String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+        int compare = currentDate.compareTo(MainFragmentActivity.bookDate);
+        if (compare < 0 || compare == 0){
+            Intent I = new Intent(getActivity().getApplicationContext(), SortWorkspaceDialog.class);
+            startActivity(I);
+        }
+        else {
+            Toast.makeText(getActivity(), "Current Date exceeds booking date", Toast.LENGTH_LONG).show();
+        }
     }
+
+}
 
 //    private int mYear, mMonth, mDay;
 //    private int check;
@@ -83,4 +100,4 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
 //            }
 //        });
 //    }
-}
+

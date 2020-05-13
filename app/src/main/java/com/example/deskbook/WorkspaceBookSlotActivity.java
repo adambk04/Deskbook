@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.chip.Chip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,7 +23,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 
 public class WorkspaceBookSlotActivity extends AppCompatActivity {
 
@@ -194,11 +197,13 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
         btnSelectTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //if intent came to extend booking time
                 if(check == 1){
                     boolean checkError = getCheckedError();
                     if (time[0] == 99) {
                         Toast.makeText(WorkspaceBookSlotActivity.this, "Please Select Time Slot", Toast.LENGTH_SHORT).show();
-                    } else {
+                    }
+                    else {
                         if (checkError) {
                             Intent j = new Intent(WorkspaceBookSlotActivity.this, ExtendBookingConfirmationDialog.class);
                             j.putExtra("workspaceID", workspaceID );
@@ -215,12 +220,17 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
                     if (time[0] == 99) {
                         Toast.makeText(WorkspaceBookSlotActivity.this, "Please Select Time Slot", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (checkError) {
+                        boolean x = checkCurrentTimeExceed();
+                        if (checkError && x) {
                             Intent I = new Intent(WorkspaceBookSlotActivity.this, BookSlotConfirmationDialog.class);
                             I.putExtra("key", workspaceKey);
                             startActivity(I);
-                        } else {
+                        }
+                        else if(!checkError){
                             Toast.makeText(WorkspaceBookSlotActivity.this, "Cant leave gap between timeslot", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(!x){
+                            Toast.makeText(WorkspaceBookSlotActivity.this, "Current Time exceed booking start time", Toast.LENGTH_LONG).show();
                         }
                     }
                 }
@@ -256,6 +266,30 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
             return true;
         } else
             return false;
+    }
+
+    public boolean checkCurrentTimeExceed(){
+        String hour = new SimpleDateFormat("HH").format(Calendar.getInstance().getTime());
+        String minute = new SimpleDateFormat("mm").format(Calendar.getInstance().getTime());
+        int currentHour = Integer.parseInt(hour);
+        int currentMinute = Integer.parseInt(minute);
+
+        System.out.println("current hour current minute and startTime" + currentHour + " | " + currentMinute + " | " + time[0]);
+
+        if(currentHour < time[0]){
+            return true;
+        }
+        else if(currentHour == time[0]){
+            if(currentMinute > 30){
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        else {
+            return false;
+        }
     }
 }
 

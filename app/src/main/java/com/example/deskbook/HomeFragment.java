@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +37,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 public class HomeFragment extends Fragment {
 
@@ -45,12 +49,12 @@ public class HomeFragment extends Fragment {
     LinearLayoutManager linearLayoutManager;
     FirebaseDatabase database;
     FirebaseRecyclerAdapter adapter;
-    DatabaseReference dbRef,dbref2, dbRef3;
+    DatabaseReference dbRef,dbref2, dbRef3, dbRef4;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
     String userID;
     String qrString;
-    String workspaceKey;
+    String workspaceKey, bookingKey;
     int total;
 
     @Nullable
@@ -116,6 +120,49 @@ public class HomeFragment extends Fragment {
         fetch();
 
     }
+
+    private int checkTime(String startTime, String bookDate){
+
+        int check;
+
+        String timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+        String dateStamp = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+
+        String exceedTime = startTime.substring(0, startTime.length()-2)+"30";
+        System.out.println("exceed time " + exceedTime);
+
+        // if +ve return = greater than, if -ve return = less than if return 0 mean equal to
+        int x = timeStamp.compareTo(startTime);
+        int y = timeStamp.compareTo(exceedTime);
+        int z = timeStamp.compareTo(bookDate);
+
+        //check if timeStamp passed booking time
+        System.out.println("x and y " + x + " " + y);
+        if(z == 0) {
+            // if currentTime >= bookTime
+            if (x > 0 || x == 0) {
+                // if currentTime <= exceedTime
+                if (y == 0 || y < 0) {
+                    //pass
+                    check = 0;
+                }
+                // currentTime > exceedTime
+                else {
+                    //exceed booking startTime by 30 mins
+                    check = 1;
+                }
+            }
+            // if currentTime < bookTime
+            else {
+                check = 2;
+            }
+        }
+        else {
+            check = 2;
+        }
+        return check;
+    }
+
     private void fetch(){
         Query query = dbRef.orderByChild("checkOutStatus").equalTo("0");
 
@@ -267,14 +314,19 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if(btnBook.getText().toString().equals("Check In")){
-                        workspaceKey = workspaceID;
-                        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(HomeFragment.this);
-                        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-                        integrator.setPrompt("Scan");
-                        integrator.setCameraId(0);
-                        integrator.setBeepEnabled(false);
-                        integrator.setBarcodeImageEnabled(false);
-                        integrator.initiateScan();
+                        int check = checkTime(bookingTime, bookDate);
+                        //if current time between bookingStartTime and bookingStartTime + 30mins
+                        if(check == 0){
+                            startScanning();
+                        }
+                        // if current time exceeds 30mins time limit
+                        else if (check == 1 ){
+                            Toast.makeText(getActivity(), "booking has exceeded time limit of 30 Minutes", Toast.LENGTH_LONG).show();
+                        }
+                        // if current time still less than bookingStartTime
+                        else if (check == 2){
+                            Toast.makeText(getActivity(), "booking time has not reach", Toast.LENGTH_SHORT).show();
+                        }
                     }
                     else{
                         Toast.makeText(getActivity(), "check Out function", Toast.LENGTH_SHORT).show();
@@ -284,7 +336,9 @@ public class HomeFragment extends Fragment {
 
         }
         public void setIvWorkspace(String  string) {
-            Glide.with(getActivity()).load(string).into(ivWorkspace);
+            RequestOptions options = new RequestOptions();
+            options.centerCrop();
+            Glide.with(getActivity()).load(string).apply(options).into(ivWorkspace);
         }
         public void setTvQueue(String string){
             tvQueue.setText(string);
@@ -328,6 +382,17 @@ public class HomeFragment extends Fragment {
         public void setBookingTime(String bookingTime) {
             this.bookingTime = bookingTime;
         }
+        public void startScanning(){
+            bookingKey = adapter.getRef(position).getKey();
+            workspaceKey = workspaceID;
+            IntentIntegrator integrator = IntentIntegrator.forSupportFragment(HomeFragment.this);
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+            integrator.setPrompt("Scan");
+            integrator.setCameraId(0);
+            integrator.setBeepEnabled(false);
+            integrator.setBarcodeImageEnabled(false);
+            integrator.initiateScan();
+        }
 
     }
 
@@ -352,6 +417,12 @@ public class HomeFragment extends Fragment {
             } else {
                 qrString = result.getContents();
                 if(qrString.equals(workspaceKey)){
+                    // TODO function , turn on relay on arduino board
+                    String checkInTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+                    dbRef4 = database.getReference("/users/" + userID + "/booking/" + bookingKey);
+                    dbRef4.child("checkInTime").setValue(checkInTime);
+                    dbRef4.child("checkInStatus").setValue("1");
+                    dbRef4.child("bookingStatus").setValue("Active");
                     Toast.makeText(getActivity(), "check in successful", Toast.LENGTH_SHORT).show();
                 }
                 else{
