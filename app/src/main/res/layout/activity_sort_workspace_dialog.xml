@@ -61,7 +61,7 @@
         android:layout_marginTop="8dp"
         android:text="Monitor"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/TVamenitySort" />
 
     <RadioGroup
         android:id="@+id/RGworkspace"
@@ -71,7 +71,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/TVworkspaceTypeSort">
 
         <RadioButton
             android:id="@+id/RBroom"
@@ -87,24 +87,24 @@
     </RadioGroup>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/TVamenitySort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="Amenities"
+        android:text="Amenities   "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/RGworkspace" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/TVworkspaceTypeSort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        android:text="Workspace Type"
+        android:text="Workspace Type   "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

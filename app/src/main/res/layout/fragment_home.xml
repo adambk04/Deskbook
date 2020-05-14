@@ -9,7 +9,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,7 +31,7 @@
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginLeft="6dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:layout_marginRight="6dp"
         android:elevation="4dp"
         android:visibility="gone"
@@ -58,7 +60,7 @@
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="There are currently no booking made"
+                android:text="There is currently no booking made"
                 app:layout_constraintBottom_toTopOf="@+id/BtnStartBooking"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

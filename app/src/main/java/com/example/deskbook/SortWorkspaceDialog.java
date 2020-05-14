@@ -9,10 +9,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SortWorkspaceDialog extends AppCompatActivity {
 
+    TextView tvType, tvAmenity;
     RadioGroup rgWorkspace;
     RadioButton rbDesk, rbRoom;
     CheckBox cbProjector, cbMonitor, cbTelephone, cbNone;
@@ -34,6 +36,8 @@ public class SortWorkspaceDialog extends AppCompatActivity {
         cbTelephone = findViewById(R.id.CBtelephone);
         cbNone = findViewById(R.id.CBnone);
         btnSort = findViewById(R.id.BtnSort);
+        tvAmenity = findViewById(R.id.TVamenitySort);
+        tvType = findViewById(R.id.TVworkspaceTypeSort);
 
         rgWorkspace.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -85,13 +89,15 @@ public class SortWorkspaceDialog extends AppCompatActivity {
         btnSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                amenity1 = null;
-                amenity2 = null;
-                amenity3 = null;
-                amenity4 = null;
-                checkChecked(v);
-                Intent I = new Intent(SortWorkspaceDialog.this, WorkspaceListActivity.class);
-                startActivity(I);
+                if(checkIfEmpty()) {
+                    amenity1 = null;
+                    amenity2 = null;
+                    amenity3 = null;
+                    amenity4 = null;
+                    checkChecked(v);
+                    Intent I = new Intent(SortWorkspaceDialog.this, WorkspaceListActivity.class);
+                    startActivity(I);
+                }
             }
         });
     }
@@ -108,6 +114,26 @@ public class SortWorkspaceDialog extends AppCompatActivity {
         }
         if(cbNone.isChecked()){
             amenity4 = "None";
+        }
+    }
+
+    public boolean checkIfEmpty(){
+        tvType.setError(null);
+        tvAmenity.setError(null);
+        int empty = 0;
+        if(!rbRoom.isChecked() && !rbDesk.isChecked()){
+            tvType.setError("Select Type");
+            empty = 1;
+        }
+        if(!cbMonitor.isChecked() && !cbProjector.isChecked() && !cbTelephone.isChecked() && !cbNone.isChecked()){
+            tvAmenity.setError("Select Amenity");
+            empty = 1;
+        }
+        if(empty == 0){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 }
