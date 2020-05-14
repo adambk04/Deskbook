@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -57,6 +58,7 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
         dbRef2 = database.getReference("/workspace/" + workspaceKey + "/booking/" + MainFragmentActivity.bookDate);
         dbRef3 = database.getReference("/users/" + userID);
         dbref4 = database.getReference("/users/" + userID + "/booking/");
+
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

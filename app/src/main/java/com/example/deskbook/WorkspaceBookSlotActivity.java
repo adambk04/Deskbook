@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Iterator;
 
 public class WorkspaceBookSlotActivity extends AppCompatActivity {
 
@@ -178,12 +180,21 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        for (final DataSnapshot ds : dataSnapshot.getChildren()) {
                             System.out.println("time booked : " + ds.getKey());
-                            String x = ds.getKey();
+                            final String x = ds.getKey();
                             Chip chip = (Chip) findViewById(getResources().getIdentifier("Chip" + x, "id", packageName));
                             chip.setCheckable(false);
                             chip.setChipBackgroundColor(getResources().getColorStateList(R.color.booked));
+                            chip.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String key = ds.getValue(String.class);
+                                    Intent j = new Intent(WorkspaceBookSlotActivity.this, ShowProfileDialog.class);
+                                    j.putExtra("userID", key);
+                                    startActivity(j);
+                                }
+                            });
                         }
                     }
                 }
@@ -238,6 +249,34 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
         });
     }
 
+    private void showProfile(final String key){
+        DatabaseReference ref = database.getReference("/workspace/" + workspaceID + "/booking/" + MainFragmentActivity.bookDate);
+//        DatabaseReference ref = database.getReference("/workspace/" + workspaceID + "/booking/" + MainFragmentActivity.bookDate + "/" + key);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String userKey = ds.child("nine").getValue(String.class);
+                    Toast.makeText(WorkspaceBookSlotActivity.this, userKey, Toast.LENGTH_SHORT).show();
+                }
+//                String userKey = dataSnapshot.getValue(String.class);
+//                Toast.makeText(WorkspaceBookSlotActivity.this, userKey, Toast.LENGTH_SHORT).show();
+
+//                Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
+//                Iterator<DataSnapshot> iterator = snapshotIterator.iterator();
+//
+//                while (iterator.hasNext()) {
+//                    DataSnapshot next = iterator.next();
+//                    String userKey = next.child("9").getValue().toString();
+//                    Toast.makeText(WorkspaceBookSlotActivity.this, userKey, Toast.LENGTH_SHORT).show();
+//                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
     public boolean getCheckedError() {
         int count = 0;
         int error = 0;
@@ -271,7 +310,7 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
     public boolean checkCurrentTimeExceed(){
         String hour = new SimpleDateFormat("HH").format(Calendar.getInstance().getTime());
         String minute = new SimpleDateFormat("mm").format(Calendar.getInstance().getTime());
-        String dateStamp = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+        String dateStamp = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
 
         int currentHour = Integer.parseInt(hour);
         int currentMinute = Integer.parseInt(minute);

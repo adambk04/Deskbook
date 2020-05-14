@@ -47,8 +47,8 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
         } else {
             month2 = Integer.toString(month);
         }
-        MainFragmentActivity.bookDate = day2 + "/" + month2 + "/" + year;
-        String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+        MainFragmentActivity.bookDate = day2 + "-" + month2 + "-" + year;
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
         int compare = currentDate.compareTo(MainFragmentActivity.bookDate);
         if (compare < 0 || compare == 0){
             Intent I = new Intent(getActivity().getApplicationContext(), SortWorkspaceDialog.class);

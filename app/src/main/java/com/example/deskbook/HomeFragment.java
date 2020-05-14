@@ -126,7 +126,7 @@ public class HomeFragment extends Fragment {
         int check;
 
         String timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-        String dateStamp = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+        String dateStamp = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
 
         String exceedTime = startTime.substring(0, startTime.length()-2)+"30";
         System.out.println("exceed time " + exceedTime);
