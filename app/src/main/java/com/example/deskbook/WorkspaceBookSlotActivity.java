@@ -271,21 +271,29 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
     public boolean checkCurrentTimeExceed(){
         String hour = new SimpleDateFormat("HH").format(Calendar.getInstance().getTime());
         String minute = new SimpleDateFormat("mm").format(Calendar.getInstance().getTime());
+        String dateStamp = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+
         int currentHour = Integer.parseInt(hour);
         int currentMinute = Integer.parseInt(minute);
+        int z = dateStamp.compareTo(MainFragmentActivity.bookDate);
 
         System.out.println("current hour current minute and startTime" + currentHour + " | " + currentMinute + " | " + time[0]);
 
-        if(currentHour < time[0]){
-            return true;
-        }
-        else if(currentHour == time[0]){
-            if(currentMinute > 30){
+        if (z == 0) {
+            if (currentHour < time[0]) {
+                return true;
+            } else if (currentHour == time[0]) {
+                if (currentMinute > 30) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
                 return false;
             }
-            else {
-                return true;
-            }
+        }
+        else if ( z < 0){
+            return true;
         }
         else {
             return false;

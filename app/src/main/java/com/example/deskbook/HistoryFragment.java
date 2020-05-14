@@ -136,7 +136,9 @@ public class HistoryFragment extends Fragment {
 
         }
         public void setIvWorkspace(String  string) {
-            Glide.with(getActivity()).load(string).into(ivWorkspaceImage);
+            RequestOptions options = new RequestOptions();
+            options.centerCrop();
+            Glide.with(getActivity()).load(string).apply(options).into(ivWorkspaceImage);
         }
 
         public void setTvWorkspaceName(String string) {

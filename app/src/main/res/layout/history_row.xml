@@ -21,14 +21,12 @@
             <ImageView
                 android:id="@+id/IVworkspaceImageHistory"
                 android:layout_width="130dp"
-                android:layout_height="120dp"
+                android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/textView17"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/TVworkspaceNameHistory"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
@@ -37,10 +35,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
                 android:text="Desk-F1-S004"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/IVworkspaceImageHistory"
-                app:layout_constraintTop_toTopOf="@+id/IVworkspaceImageHistory" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/TVlocationHistory"
@@ -78,11 +77,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
                 android:text="13/05/2020"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/textView16"
-                app:layout_constraintStart_toEndOf="@+id/IVworkspaceImageHistory" />
+                app:layout_constraintStart_toEndOf="@+id/IVworkspaceImageHistory"
+                app:layout_constraintTop_toBottomOf="@+id/TVlocationHistory" />
 
             <TextView
                 android:id="@+id/textView16"
@@ -91,8 +91,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:text="Check-In Time"
-                app:layout_constraintBottom_toTopOf="@+id/textView17"
-                app:layout_constraintStart_toEndOf="@+id/IVworkspaceImageHistory" />
+                app:layout_constraintStart_toEndOf="@+id/IVworkspaceImageHistory"
+                app:layout_constraintTop_toBottomOf="@+id/TVbookDateHistory" />
 
             <TextView
                 android:id="@+id/textView17"
@@ -100,9 +100,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="Check-Out Time"
-                app:layout_constraintBottom_toBottomOf="@+id/IVworkspaceImageHistory"
-                app:layout_constraintStart_toEndOf="@+id/IVworkspaceImageHistory" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/IVworkspaceImageHistory"
+                app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
             <TextView
                 android:id="@+id/textView18"

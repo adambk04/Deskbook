@@ -100,7 +100,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        dbRef.orderByChild("checkOutStatus").equalTo("0").addListenerForSingleValueEvent(new ValueEventListener() {
+        dbRef.orderByChild("checkOutStatus").equalTo("0").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){
@@ -134,7 +134,7 @@ public class HomeFragment extends Fragment {
         // if +ve return = greater than, if -ve return = less than if return 0 mean equal to
         int x = timeStamp.compareTo(startTime);
         int y = timeStamp.compareTo(exceedTime);
-        int z = timeStamp.compareTo(bookDate);
+        int z = dateStamp.compareTo(bookDate);
 
         //check if timeStamp passed booking time
         System.out.println("x and y " + x + " " + y);
@@ -157,8 +157,11 @@ public class HomeFragment extends Fragment {
                 check = 2;
             }
         }
-        else {
+        else if (z < 0) {
             check = 2;
+        }
+        else {
+            check = 1;
         }
         return check;
     }
@@ -270,10 +273,27 @@ public class HomeFragment extends Fragment {
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()){
                                 case R.id.MenuDeleteBooking:
-                                    String bookKey = adapter.getRef(position).getKey();
-                                    Intent I = new Intent(getActivity(), DeleteBookingConfimationDialog.class);
-                                    I.putExtra("bookKey", bookKey);
-                                    startActivity(I);
+                                    final String bookKey = adapter.getRef(position).getKey();
+                                    DatabaseReference ref = database.getReference("/users/" + userID + "/booking/" + bookKey);
+                                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            UserBooking booking = dataSnapshot.getValue(UserBooking.class);
+                                            String checkInStatus = booking.getCheckInStatus();
+                                            if(checkInStatus.equals("1")){
+                                                Toast.makeText(getActivity(), "Booking is in progress, Can't delete", Toast.LENGTH_SHORT).show();
+                                            }
+                                            else {
+                                                Intent I = new Intent(getActivity(), DeleteBookingConfimationDialog.class);
+                                                I.putExtra("bookKey", bookKey);
+                                                startActivity(I);
+                                            }
+
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        }
+                                    });
                                     return true;
                                 case R.id.MenuExtendBooking:
                                     Intent j = new Intent(getActivity(), WorkspaceBookSlotActivity.class);
@@ -314,22 +334,26 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if(btnBook.getText().toString().equals("Check In")){
-                        int check = checkTime(bookingTime, bookDate);
-                        //if current time between bookingStartTime and bookingStartTime + 30mins
-                        if(check == 0){
-                            startScanning();
-                        }
-                        // if current time exceeds 30mins time limit
-                        else if (check == 1 ){
-                            Toast.makeText(getActivity(), "booking has exceeded time limit of 30 Minutes", Toast.LENGTH_LONG).show();
-                        }
-                        // if current time still less than bookingStartTime
-                        else if (check == 2){
-                            Toast.makeText(getActivity(), "booking time has not reach", Toast.LENGTH_SHORT).show();
-                        }
+                        startScanning();
+//                        int check = checkTime(bookingTime, bookDate);
+//                        //if current time between bookingStartTime and bookingStartTime + 30mins
+//                        if(check == 0){
+//                            startScanning();
+//                        }
+//                        // if current time exceeds 30mins time limit
+//                        else if (check == 1 ){
+//                            Toast.makeText(getActivity(), "booking has exceeded time limit of 30 Minutes", Toast.LENGTH_LONG).show();
+//                        }
+//                        // if current time still less than bookingStartTime
+//                        else if (check == 2){
+//                            Toast.makeText(getActivity(), "booking time has not reach", Toast.LENGTH_SHORT).show();
+//                        }
                     }
                     else{
-                        Toast.makeText(getActivity(), "check Out function", Toast.LENGTH_SHORT).show();
+                        Intent x = new Intent(getActivity(), CheckOutConfirmationDialog.class);
+                        x.putExtra("bookKey", adapter.getRef(position).getKey());
+                        x.putExtra("userID", userID);
+                        startActivity(x);
                     }
                 }
             });
