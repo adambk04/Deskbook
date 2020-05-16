@@ -126,6 +126,7 @@
                 android:text="Desk"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:gravity="center_vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/IVworkspace4"
@@ -199,6 +200,17 @@
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+            <TextView
+                android:id="@+id/TVuserCapacity4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:text="( 5 Pax )"
+                app:layout_constraintBottom_toBottomOf="@+id/TVworkspaceName4"
+                app:layout_constraintStart_toEndOf="@+id/TVworkspaceName4"
+                app:layout_constraintTop_toTopOf="@+id/TVworkspaceName4" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -183,10 +183,22 @@
                 android:text="Workspace Name"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:gravity="center_vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/TVuserCapacity2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:text="capacity"
+                app:layout_constraintBottom_toBottomOf="@+id/TVworkspaceName2"
+                app:layout_constraintStart_toEndOf="@+id/TVworkspaceName2"
+                app:layout_constraintTop_toTopOf="@+id/TVworkspaceName2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -32,7 +32,7 @@ import java.util.Iterator;
 public class WorkspaceBookSlotActivity extends AppCompatActivity {
 
     ImageView ivWorkspace2;
-    TextView tvWorkspaceName2, tvLocation2, tvAmenities2;
+    TextView tvWorkspaceName2, tvLocation2, tvAmenities2, tvCapacity2;
     Chip chip8, chip9, chip10, chip11, chip12, chip13, chip14, chip15, chip16, chip17, chip18, chip19;
     Button btnSelectTime;
     FirebaseDatabase database;
@@ -62,6 +62,7 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
         tvWorkspaceName2 = findViewById(R.id.TVworkspaceName2);
         tvLocation2 = findViewById(R.id.TVlocation2);
         tvAmenities2 = findViewById(R.id.TVamenity2);
+        tvCapacity2 = findViewById(R.id.TVuserCapacity2);
         btnSelectTime = findViewById(R.id.BtnSelectTime);
         chip8 = findViewById(R.id.Chip8);
         chip9 = findViewById(R.id.Chip9);
@@ -109,9 +110,12 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Workspace workspace = dataSnapshot.getValue(Workspace.class);
                     tvWorkspaceName2.setText(workspace.getWorkspaceName());
+                    tvCapacity2.setText("(" + workspace.getCapacity() + " Pax)");
                     tvLocation2.setText(workspace.getLocation());
                     tvAmenities2.setText(workspace.getAmenities().getFullAmenity());
-                    Glide.with(getApplicationContext()).load(workspace.getWorkspaceImage()).into(ivWorkspace2);
+                    RequestOptions options = new RequestOptions();
+                    options.centerCrop();
+                    Glide.with(getApplicationContext()).load(workspace.getWorkspaceImage()).apply(options).into(ivWorkspace2);
                 }
 
                 @Override
@@ -166,9 +170,12 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Workspace workspace = dataSnapshot.getValue(Workspace.class);
                     tvWorkspaceName2.setText(workspace.getWorkspaceName());
+                    tvCapacity2.setText("(" + workspace.getCapacity() + " Pax)");
                     tvLocation2.setText(workspace.getLocation());
                     tvAmenities2.setText(workspace.getAmenities().getFullAmenity());
-                    Glide.with(getApplicationContext()).load(workspace.getWorkspaceImage()).into(ivWorkspace2);
+                    RequestOptions options = new RequestOptions();
+                    options.centerCrop();
+                    Glide.with(getApplicationContext()).load(workspace.getWorkspaceImage()).apply(options).into(ivWorkspace2);
                 }
 
                 @Override
@@ -245,34 +252,6 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
                         }
                     }
                 }
-            }
-        });
-    }
-
-    private void showProfile(final String key){
-        DatabaseReference ref = database.getReference("/workspace/" + workspaceID + "/booking/" + MainFragmentActivity.bookDate);
-//        DatabaseReference ref = database.getReference("/workspace/" + workspaceID + "/booking/" + MainFragmentActivity.bookDate + "/" + key);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String userKey = ds.child("nine").getValue(String.class);
-                    Toast.makeText(WorkspaceBookSlotActivity.this, userKey, Toast.LENGTH_SHORT).show();
-                }
-//                String userKey = dataSnapshot.getValue(String.class);
-//                Toast.makeText(WorkspaceBookSlotActivity.this, userKey, Toast.LENGTH_SHORT).show();
-
-//                Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
-//                Iterator<DataSnapshot> iterator = snapshotIterator.iterator();
-//
-//                while (iterator.hasNext()) {
-//                    DataSnapshot next = iterator.next();
-//                    String userKey = next.child("9").getValue().toString();
-//                    Toast.makeText(WorkspaceBookSlotActivity.this, userKey, Toast.LENGTH_SHORT).show();
-//                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
     }

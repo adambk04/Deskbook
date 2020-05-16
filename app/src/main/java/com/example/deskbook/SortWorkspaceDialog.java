@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SortWorkspaceDialog extends AppCompatActivity {
 
@@ -19,8 +19,10 @@ public class SortWorkspaceDialog extends AppCompatActivity {
     RadioButton rbDesk, rbRoom;
     CheckBox cbProjector, cbMonitor, cbTelephone, cbNone;
     Button btnSort;
+    NumberPicker capacityPicker;
     public static String workspaceType;
     public static String amenity1, amenity2, amenity3, amenity4;
+    public static String userCapacity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,10 @@ public class SortWorkspaceDialog extends AppCompatActivity {
         btnSort = findViewById(R.id.BtnSort);
         tvAmenity = findViewById(R.id.TVamenitySort);
         tvType = findViewById(R.id.TVworkspaceTypeSort);
+        capacityPicker = findViewById(R.id.CapacityPicker);
+
+        capacityPicker.setMinValue(1);
+        capacityPicker.setMaxValue(20);
 
         rgWorkspace.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -94,6 +100,7 @@ public class SortWorkspaceDialog extends AppCompatActivity {
                     amenity2 = null;
                     amenity3 = null;
                     amenity4 = null;
+                    userCapacity = Integer.toString(capacityPicker.getValue());
                     checkChecked(v);
                     Intent I = new Intent(SortWorkspaceDialog.this, WorkspaceListActivity.class);
                     startActivity(I);

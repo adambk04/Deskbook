@@ -60,9 +60,26 @@
                 app:chipEndPadding="4dp"
                 app:chipStartPadding="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/ChipProjector"
+                app:layout_constraintEnd_toStartOf="@+id/chipUserCapacity"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/ChipDate"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipUserCapacity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:backgroundTint="@color/colorAccent"
+                android:text="Desk"
+                android:textColor="@color/LightWhite"
+                android:textSize="10sp"
+                app:chipEndPadding="4dp"
+                app:chipStartPadding="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ChipProjector"
+                app:layout_constraintStart_toEndOf="@+id/ChipWorkspaceType"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.chip.Chip
@@ -119,7 +136,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/ChipTelephone"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/ChipWorkspaceType"
+                app:layout_constraintStart_toEndOf="@+id/chipUserCapacity"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.chip.Chip

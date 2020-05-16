@@ -24,7 +24,7 @@ import java.util.Calendar;
 
 public class BookSlotConfirmationDialog extends AppCompatActivity {
 
-    TextView tvWorkspaceName3, tvLocation3, tvAmenities3, tvTimeSlot, tvBookDate;
+    TextView tvWorkspaceName3, tvLocation3, tvAmenities3, tvCapacity3, tvTimeSlot, tvBookDate;
     Button btnConfirm, btnCancel;
     FirebaseDatabase database;
     DatabaseReference dbRef,dbRef2,dbRef3,dbref4;
@@ -44,6 +44,7 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
         tvWorkspaceName3 = findViewById(R.id.TVworkspaceName3);
         tvLocation3 = findViewById(R.id.TVlocation3);
         tvAmenities3 = findViewById(R.id.TVamenity3);
+        tvCapacity3 = findViewById(R.id.TVuserCapacity3);
         tvTimeSlot = findViewById(R.id.TVtimeSlot);
         tvBookDate = findViewById(R.id.TVbookDate);
         btnCancel = findViewById(R.id.BtnCancelBookSlot);
@@ -67,6 +68,7 @@ public class BookSlotConfirmationDialog extends AppCompatActivity {
                 tvWorkspaceName3.setText(workspace.getWorkspaceName());
                 tvLocation3.setText(workspace.getLocation());
                 tvAmenities3.setText(workspace.getAmenities().getFullAmenity());
+                tvCapacity3.setText("( " + workspace.getCapacity() + " Pax )");
                 tvTimeSlot.setText(getTimeString());
                 tvBookDate.setText(MainFragmentActivity.bookDate);
             }

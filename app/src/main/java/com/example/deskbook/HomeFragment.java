@@ -220,9 +220,10 @@ public class HomeFragment extends Fragment {
                         Workspace workspace = dataSnapshot.getValue(Workspace.class);
                         holder.setIvWorkspace(workspace.getWorkspaceImage());
                         holder.setTvWorkspaceName(workspace.getWorkspaceName());
+                        holder.setTvCapacity(workspace.getCapacity());
                         holder.setTvLocation(workspace.getLocation());
                         holder.setTvAmenities(workspace.getAmenities().getFullAmenity());
-                        if(workspace.getWorkspaceType().equals("Meeting Room")){
+                        if(workspace.getCapacity().compareTo("1") > 0){
                             holder.setBtnShare();
                         }
                     }
@@ -240,7 +241,7 @@ public class HomeFragment extends Fragment {
         public Button btnBook;
         public ImageButton btnMenu, btnShare;
         public ImageView ivWorkspace;
-        public TextView tvWorkspaceName, tvLocation, tvBookDate, tvBookTime, tvAmenity,tvQueue;
+        public TextView tvWorkspaceName, tvCapacity, tvLocation, tvBookDate, tvBookTime, tvAmenity,tvQueue;
         public int position,bookStartTime, bookEndTime;
         public String workspaceID, bookDate, bookingTime;
 
@@ -253,6 +254,7 @@ public class HomeFragment extends Fragment {
             btnShare = itemView.findViewById(R.id.BtnShareBooking);
             tvAmenity = itemView.findViewById(R.id.TVamenity4);
             tvWorkspaceName = itemView.findViewById(R.id.TVworkspaceName4);
+            tvCapacity = itemView.findViewById(R.id.TVuserCapacity4);
             tvBookDate = itemView.findViewById(R.id.TVbookDate4);
             tvBookTime = itemView.findViewById(R.id.TVbookTime4);
             tvLocation = itemView.findViewById(R.id.TVlocation4);
@@ -370,6 +372,9 @@ public class HomeFragment extends Fragment {
         public void setTvWorkspaceName(String string) {
             tvWorkspaceName.setText(string);
         }
+        public void setTvCapacity(String string) {
+            tvCapacity.setText("(" + string + " Pax)");
+        }
         public void setTvLocation(String string) {
             tvLocation.setText(string);
         }
@@ -450,7 +455,7 @@ public class HomeFragment extends Fragment {
                     Toast.makeText(getActivity(), "check in successful", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(getActivity(), "check in failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Wrong workspace", Toast.LENGTH_SHORT).show();
                 }
             }
         }

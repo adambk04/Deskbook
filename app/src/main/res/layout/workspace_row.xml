@@ -31,10 +31,12 @@
 
             <ImageView
                 android:id="@+id/IVworkspace"
-                android:layout_width="140dp"
+                android:layout_width="120dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -60,12 +62,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:text="Desk-F1-E-001"
                 android:drawableLeft="@drawable/ic_work_black_24dp"
-                android:drawablePadding="8dp"
+                android:drawablePadding="4dp"
+                android:text="Desk-F1-E-001"
                 android:textAllCaps="true"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
+                android:gravity="center_vertical"
                 app:layout_constraintBottom_toTopOf="@+id/TVlocation"
                 app:layout_constraintStart_toEndOf="@+id/IVworkspace"
                 app:layout_constraintTop_toTopOf="parent"
@@ -78,11 +81,22 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:drawableLeft="@drawable/ic_location_on_black_24dp"
-                android:drawablePadding="8dp"
+                android:drawablePadding="4dp"
                 android:text="First Floor East"
                 app:layout_constraintBottom_toTopOf="@+id/TVamenity"
                 app:layout_constraintStart_toEndOf="@+id/IVworkspace"
                 app:layout_constraintTop_toBottomOf="@+id/TVworkspaceName" />
+
+            <TextView
+                android:id="@+id/TVuserCapacity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:text="( 8 Pax )"
+                app:layout_constraintBottom_toBottomOf="@+id/TVworkspaceName"
+                app:layout_constraintStart_toEndOf="@+id/TVworkspaceName"
+                app:layout_constraintTop_toTopOf="@+id/TVworkspaceName" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

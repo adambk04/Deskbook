@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.chip.Chip;
@@ -36,7 +38,7 @@ public class WorkspaceListActivity extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     FirebaseRecyclerAdapter adapter;
     String typeAmenityKey;
-    Chip chipDate, chipWorkspaceType, chipNone, chipMonitor, chipProjector,chipTelephone;
+    Chip chipDate, chipWorkspaceType, chipCapacity, chipNone, chipMonitor, chipProjector,chipTelephone;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -54,6 +56,7 @@ public class WorkspaceListActivity extends AppCompatActivity {
 
         workspaceList = findViewById(R.id.RVworkspace);
         chipDate = findViewById(R.id.ChipDate);
+        chipCapacity = findViewById(R.id.chipUserCapacity);
         chipWorkspaceType = findViewById(R.id.ChipWorkspaceType);
         chipNone = findViewById(R.id.ChipNone);
         chipMonitor = findViewById(R.id.ChipMonitor);
@@ -75,6 +78,7 @@ public class WorkspaceListActivity extends AppCompatActivity {
 
     public void generateChips(){
         chipDate.setText(MainFragmentActivity.bookDate);
+        chipCapacity.setText(SortWorkspaceDialog.userCapacity + " Pax");
         if(SortWorkspaceDialog.workspaceType.equals("Desk")) {
             chipWorkspaceType.setText("Desk");
         }
@@ -96,11 +100,13 @@ public class WorkspaceListActivity extends AppCompatActivity {
     }
 
     public void createTypeAmenityKey(){
+        typeAmenityKey = SortWorkspaceDialog.userCapacity;
+
         if(SortWorkspaceDialog.workspaceType.equals("Desk")) {
-            typeAmenityKey = "d";
+            typeAmenityKey = typeAmenityKey + "d";
         }
         else {
-            typeAmenityKey = "r";
+            typeAmenityKey = typeAmenityKey + "r";
         }
         if(SortWorkspaceDialog.amenity1 != null){
             typeAmenityKey = typeAmenityKey + "1";
@@ -140,6 +146,7 @@ public class WorkspaceListActivity extends AppCompatActivity {
                         holder.setTvLocation(workspace.getLocation());
                         holder.setIvWorkspace(workspace.getWorkspaceImage());
                         holder.setTvAmenities(workspace.getAmenities().getFullAmenity());
+                        holder.setTvCapacity(workspace.getCapacity());
 
                         holder.root.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -165,6 +172,7 @@ public class WorkspaceListActivity extends AppCompatActivity {
             public TextView tvWorkspaceName;
             public TextView tvLocation;
             public TextView tvAmenities;
+            public TextView tvCapacity;
             public ImageView ivWorkspace;
             public CardView cvWorkspace;
 
@@ -174,6 +182,7 @@ public class WorkspaceListActivity extends AppCompatActivity {
                 tvWorkspaceName = itemView.findViewById(R.id.TVworkspaceName);
                 tvLocation = itemView.findViewById(R.id.TVlocation);
                 tvAmenities = itemView.findViewById(R.id.TVamenity);
+                tvCapacity = itemView.findViewById(R.id.TVuserCapacity);
                 ivWorkspace = itemView.findViewById(R.id.IVworkspace);
                 cvWorkspace = itemView.findViewById(R.id.CVworkspaceRow);
             }
@@ -190,8 +199,14 @@ public class WorkspaceListActivity extends AppCompatActivity {
                 tvAmenities.setText(string3);
             }
 
+            public void setTvCapacity(String string) {
+                tvCapacity.setText("(" + string + " Pax)");
+            }
+
             public void setIvWorkspace(String  string4) {
-                Glide.with(getApplicationContext()).load(string4).into(ivWorkspace);
+                RequestOptions options = new RequestOptions();
+                options.centerCrop();
+                Glide.with(getApplicationContext()).load(string4).apply(options).into(ivWorkspace);
             }
             public void setCvWorkspaceGone(){
                 cvWorkspace.setVisibility(View.GONE);
