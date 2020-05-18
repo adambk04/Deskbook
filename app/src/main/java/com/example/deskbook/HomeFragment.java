@@ -55,6 +55,7 @@ public class HomeFragment extends Fragment {
     String userID;
     String qrString;
     String workspaceKey, bookingKey;
+    String macAddress;
     int total;
 
     @Nullable
@@ -222,6 +223,7 @@ public class HomeFragment extends Fragment {
                         holder.setTvWorkspaceName(workspace.getWorkspaceName());
                         holder.setTvCapacity(workspace.getCapacity());
                         holder.setTvLocation(workspace.getLocation());
+                        holder.setMacAddress(workspace.getMacAddress());
                         holder.setTvAmenities(workspace.getAmenities().getFullAmenity());
                         if(workspace.getCapacity().compareTo("1") > 0){
                             holder.setBtnShare();
@@ -244,6 +246,7 @@ public class HomeFragment extends Fragment {
         public TextView tvWorkspaceName, tvCapacity, tvLocation, tvBookDate, tvBookTime, tvAmenity,tvQueue;
         public int position,bookStartTime, bookEndTime;
         public String workspaceID, bookDate, bookingTime;
+        public String board;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -336,6 +339,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if(btnBook.getText().toString().equals("Check In")){
+                        macAddress = board;
                         startScanning();
 //                        int check = checkTime(bookingTime, bookDate);
 //                        //if current time between bookingStartTime and bookingStartTime + 30mins
@@ -355,6 +359,7 @@ public class HomeFragment extends Fragment {
                         Intent x = new Intent(getActivity(), CheckOutConfirmationDialog.class);
                         x.putExtra("bookKey", adapter.getRef(position).getKey());
                         x.putExtra("userID", userID);
+                        x.putExtra("macAddress", board);        
                         startActivity(x);
                     }
                 }
@@ -411,6 +416,9 @@ public class HomeFragment extends Fragment {
         public void setBookingTime(String bookingTime) {
             this.bookingTime = bookingTime;
         }
+        public void setMacAddress(String string){
+            board = string;
+        }
         public void startScanning(){
             bookingKey = adapter.getRef(position).getKey();
             workspaceKey = workspaceID;
@@ -446,12 +454,14 @@ public class HomeFragment extends Fragment {
             } else {
                 qrString = result.getContents();
                 if(qrString.equals(workspaceKey)){
-                    // TODO function , turn on relay on arduino board
                     String checkInTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
                     dbRef4 = database.getReference("/users/" + userID + "/booking/" + bookingKey);
                     dbRef4.child("checkInTime").setValue(checkInTime);
                     dbRef4.child("checkInStatus").setValue("1");
                     dbRef4.child("bookingStatus").setValue("Active");
+                    // turn on arduino
+                    DatabaseReference ref = database.getReference("/arduino/" + macAddress);
+                    ref.child("state").setValue("ON");
                     Toast.makeText(getActivity(), "check in successful", Toast.LENGTH_SHORT).show();
                 }
                 else{

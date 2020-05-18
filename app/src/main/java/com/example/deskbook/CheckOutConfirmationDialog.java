@@ -18,8 +18,8 @@ import java.util.Calendar;
 public class CheckOutConfirmationDialog extends AppCompatActivity {
 
     FirebaseDatabase database;
-    DatabaseReference dbref;
-    String bookKey, userID;
+    DatabaseReference dbref, dbref2;
+    String bookKey, userID, macAddress;
     Button btnCancel, btnCheckOut;
 
     @Override
@@ -33,10 +33,12 @@ public class CheckOutConfirmationDialog extends AppCompatActivity {
 
         Intent intent = getIntent();
         bookKey = intent.getStringExtra("bookKey");
+        macAddress = intent.getStringExtra("macAddress");
         userID = intent.getStringExtra("userID");
 
         database = FirebaseDatabase.getInstance();
         dbref = database.getReference("/users/" + userID + "/booking/" + bookKey);
+        dbref2 = database.getReference("arduino/" + macAddress);
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +55,7 @@ public class CheckOutConfirmationDialog extends AppCompatActivity {
                 dbref.child("checkOutTime").setValue(checkOutTime);
                 dbref.child("checkOutStatus").setValue("1");
                 dbref.child("bookingStatus").setValue("Completed");
+                dbref2.child("state").setValue("OFF");
                 Toast.makeText(CheckOutConfirmationDialog.this, "Check Out Successful", Toast.LENGTH_LONG).show();
                 finish();
             }

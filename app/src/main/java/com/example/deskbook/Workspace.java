@@ -12,12 +12,13 @@ public class Workspace {
     private Amenities amenities;
     private String blockStatus;
     private String capacity;
+    private String macAddress;
 
     public Workspace(){
 
     }
 
-    public Workspace(String workspaceName, String workspaceType, String workspaceImage, String workspaceID, String location, Amenities amenities, String blockStatus, String capacity) {
+    public Workspace(String workspaceName, String workspaceType, String workspaceImage, String workspaceID, String location, Amenities amenities, String blockStatus, String capacity, String macAddress) {
         this.workspaceName = workspaceName;
         this.workspaceType = workspaceType;
         this.workspaceImage = workspaceImage;
@@ -26,6 +27,7 @@ public class Workspace {
         this.amenities = amenities;
         this.blockStatus = blockStatus;
         this.capacity = capacity;
+        this.macAddress = macAddress;
     }
 
     public String getWorkspaceName() {
@@ -54,6 +56,10 @@ public class Workspace {
 
     public String getCapacity() {
         return capacity;
+    }
+
+    public String getMacAddress() {
+        return macAddress;
     }
 
     public Amenities getAmenities(){
