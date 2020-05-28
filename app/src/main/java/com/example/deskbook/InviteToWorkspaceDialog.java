@@ -88,10 +88,11 @@ public class InviteToWorkspaceDialog extends AppCompatActivity {
                                     User user = dataSnapshot.getValue(User.class);
                                     userName = user.getName();
                                     profilePicture = user.getProfilePic();
-                                    dbRef3 = database.getReference("/users/" + recipientID + "/invites");
+                                    dbRef3 = database.getReference("/users/" + recipientID + "/notification");
                                     String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
                                     String key = dbRef3.push().getKey();
                                     Invites invite = new Invites(userID, bookingID, bookDate, bookStartTime, userName,workspaceName, timeStamp, profilePicture);
+                                    invite.setType("invitation");
                                     dbRef3.child(key).setValue(invite);
                                     Toast.makeText(InviteToWorkspaceDialog.this, "Invitation Sent", Toast.LENGTH_SHORT).show();
                                     finish();

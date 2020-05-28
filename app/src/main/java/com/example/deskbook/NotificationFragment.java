@@ -64,7 +64,7 @@ public class NotificationFragment extends Fragment {
         userID = user.getUid();
 
         database = FirebaseDatabase.getInstance();
-        dbRef = database.getReference("/users/" + userID + "/invites");
+        dbRef = database.getReference("/users/" + userID + "/notification");
 
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -105,22 +105,37 @@ public class NotificationFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull final NotificationFragment.ViewHolder holder, final int position, @NonNull final Invites invite) {
 
-                holder.setIvWorkspace(invite.getProfilePicture());
-                String text = "<b>" + invite.getUserName() + "</b>" + " invited you to join " + "<b>" + invite.getWorkspaceName() + "</b>" +
-                        " on " + "<b>" + invite.getDate() + " " + invite.getTime() + "</b>";
-                holder.setTvInvite(text);
-                holder.root.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String inviteID = adapter.getRef(position).getKey();
-                        Intent I = new Intent(getActivity(), AcceptInvitationDialog.class);
-                        I.putExtra("bookingID", invite.getBookingID());
-                        I.putExtra("fromUserID", invite.getFromUserID());
-                        I.putExtra("inviteID", inviteID);
-                        startActivity(I);
+                if(invite.getType().equals("notification")){
+                    if(invite.getDetails().equals("Completed")){
+                        holder.setIvWorkspace("https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/Misc%2Fcomplete.jpg?alt=media&token=988b2d92-8577-42b3-8a6f-f74d6c7d98fe");
                     }
-                });
-
+                    else{
+                        holder.setIvWorkspace("https://firebasestorage.googleapis.com/v0/b/deskbookingsystem.appspot.com/o/Misc%2Fcancel.png?alt=media&token=b4ca71fc-ecc3-45c1-8ffd-e09d7c14379c");
+                    }
+                    String text = "Your booking for " + "<b>" + invite.getWorkspaceName() + "</b>" +
+                            " on " + "<b>" + invite.getDate() + " " + invite.getTime() + "</b>" + " has been " + "<b>" + invite.getDetails() + "</b>";
+                    holder.setTvInvite(text);
+                    holder.setBtnClearVisible();
+                    holder.setNotificationID(adapter.getRef(position).getKey());
+                }
+                else {
+                    holder.setIvWorkspace(invite.getProfilePicture());
+                    String text = "<b>" + invite.getUserName() + "</b>" + " invited you to join " + "<b>" + invite.getWorkspaceName() + "</b>" +
+                            " on " + "<b>" + invite.getDate() + " " + invite.getTime() + "</b>";
+                    holder.setTvInvite(text);
+                    holder.setBtnClearGone();
+                    holder.root.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String inviteID = adapter.getRef(position).getKey();
+                            Intent I = new Intent(getActivity(), AcceptInvitationDialog.class);
+                            I.putExtra("bookingID", invite.getBookingID());
+                            I.putExtra("fromUserID", invite.getFromUserID());
+                            I.putExtra("inviteID", inviteID);
+                            startActivity(I);
+                        }
+                    });
+                }
             }
         };
         rvNotificationList.setAdapter(adapter);
@@ -131,6 +146,8 @@ public class NotificationFragment extends Fragment {
         public LinearLayout root;
         public ImageView ivProfilePic;
         public TextView tvInvite;
+        public ImageButton btnClear;
+        public String notificationID;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -138,6 +155,14 @@ public class NotificationFragment extends Fragment {
             root = itemView.findViewById(R.id.list_root_notification);
             ivProfilePic = itemView.findViewById(R.id.IVinvitePic);
             tvInvite = itemView.findViewById(R.id.TVinvite);
+            btnClear = itemView.findViewById(R.id.BtnClearNoti);
+
+            btnClear.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dbRef.child(notificationID).removeValue();
+                }
+            });
 
         }
         public void setIvWorkspace(String  string) {
@@ -146,7 +171,15 @@ public class NotificationFragment extends Fragment {
         public void setTvInvite(String string) {
             tvInvite.setText(Html.fromHtml(string));
         }
-
+        public void setBtnClearVisible(){
+            btnClear.setVisibility(View.VISIBLE);
+        }
+        public void setBtnClearGone(){
+            btnClear.setVisibility(View.GONE);
+        }
+        public void setNotificationID(String string){
+            notificationID = string;
+        }
     }
 
     @Override

@@ -44,7 +44,7 @@ public class AcceptInvitationDialog extends AppCompatActivity {
         userID = user.getUid();
 
         database = FirebaseDatabase.getInstance();
-        dbRef = database.getReference("/users/" + userID + "/invites");
+        dbRef = database.getReference("/users/" + userID + "/notification");
         fromRef = database.getReference("/users/" + fromUserID + "/booking/" + bookingID);
         toRef = database.getReference("/users/" + userID + "/booking/" + bookingID);
 

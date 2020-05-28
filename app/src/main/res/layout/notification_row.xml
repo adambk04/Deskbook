@@ -43,9 +43,23 @@
                 android:gravity="center_vertical"
                 android:text="Adam Razak"
                 app:layout_constraintBottom_toBottomOf="@+id/IVinvitePic"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/BtnClearNoti"
                 app:layout_constraintStart_toEndOf="@+id/IVinvitePic"
                 app:layout_constraintTop_toTopOf="@+id/IVinvitePic" />
+
+            <ImageButton
+                android:id="@+id/BtnClearNoti"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/design_default_color_background"
+                app:layout_constraintBottom_toBottomOf="@+id/TVinvite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/TVinvite"
+                app:srcCompat="@drawable/ic_clear_black_24dp"
+                tools:ignore="VectorDrawableCompat"
+                tools:visibility="gone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

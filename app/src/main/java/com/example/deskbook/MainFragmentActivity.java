@@ -53,7 +53,7 @@ public class MainFragmentActivity extends AppCompatActivity implements BottomNav
 
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/users/" + userID);
-        dbRef2 = database.getReference("/users/" + userID + "/invites");
+        dbRef2 = database.getReference("/users/" + userID + "/notification");
 
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {

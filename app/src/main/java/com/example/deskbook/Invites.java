@@ -1,6 +1,6 @@
 package com.example.deskbook;
 
-public class Invites {
+public class Invites extends Notifications {
     public String fromUserID;
     public String bookingID;
     public String date;
@@ -23,6 +23,16 @@ public class Invites {
         this.workspaceName = workspaceName;
         this.dateTimeSent = dateTimeSent;
         this.profilePicture = profilePicture;
+    }
+
+    @Override
+    public void setType(String type) {
+        super.setType(type);
+    }
+
+    @Override
+    public void setDetails(String details) {
+        super.setDetails(details);
     }
 
     public String getFromUserID() {

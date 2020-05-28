@@ -359,7 +359,7 @@ public class HomeFragment extends Fragment {
                         Intent x = new Intent(getActivity(), CheckOutConfirmationDialog.class);
                         x.putExtra("bookKey", adapter.getRef(position).getKey());
                         x.putExtra("userID", userID);
-                        x.putExtra("macAddress", board);        
+                        x.putExtra("macAddress", board);
                         startActivity(x);
                     }
                 }
