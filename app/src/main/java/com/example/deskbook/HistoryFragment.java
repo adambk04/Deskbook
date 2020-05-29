@@ -6,6 +6,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -96,6 +97,7 @@ public class HistoryFragment extends Fragment {
             }
             @Override
             protected void onBindViewHolder(@NonNull final HistoryFragment.ViewHolder holder, final int position, @NonNull final UserBooking userBooking) {
+                holder.setBookingID(adapter.getRef(position).getKey());
                 dbRef2 = database.getReference("/workspace/" + userBooking.getWorkspaceID());
                 dbRef2.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -122,6 +124,8 @@ public class HistoryFragment extends Fragment {
         public LinearLayout root;
         public ImageView ivWorkspaceImage;
         public TextView tvWorkspaceName, tvLocation, tvBookDate, tvCheckIn, tvCheckOut;
+        public ImageButton btnClearHistory;
+        public String bookingID;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -133,6 +137,14 @@ public class HistoryFragment extends Fragment {
             tvBookDate = itemView.findViewById(R.id.TVbookDateHistory);
             tvCheckIn = itemView.findViewById(R.id.TVcheckInHistory);
             tvCheckOut = itemView.findViewById(R.id.TVcheckOutHistory);
+            btnClearHistory = itemView.findViewById(R.id.BtnClearHistory);
+
+            btnClearHistory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dbRef.child(bookingID).removeValue();
+                }
+            });
 
         }
         public void setIvWorkspace(String  string) {
@@ -159,6 +171,10 @@ public class HistoryFragment extends Fragment {
 
         public void setTvCheckOut(String string) {
             tvCheckOut.setText(string);
+        }
+
+        public void setBookingID(String bookingID) {
+            this.bookingID = bookingID;
         }
     }
 
