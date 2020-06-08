@@ -247,7 +247,7 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
                         else if(!checkError){
                             Toast.makeText(WorkspaceBookSlotActivity.this, "Cant leave gap between timeslot", Toast.LENGTH_SHORT).show();
                         }
-                        else if(!x){
+                        else {
                             Toast.makeText(WorkspaceBookSlotActivity.this, "Current Time exceed booking start time", Toast.LENGTH_LONG).show();
                         }
                     }

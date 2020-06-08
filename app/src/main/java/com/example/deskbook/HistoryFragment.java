@@ -60,7 +60,7 @@ public class HistoryFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("/users/" + userID + "/booking");
 
-        dbRef.orderByChild("checkOutStatus").equalTo("1").addListenerForSingleValueEvent(new ValueEventListener() {
+        dbRef.orderByChild("checkOutStatus").equalTo("1").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){

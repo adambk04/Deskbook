@@ -18,8 +18,9 @@ import java.util.Calendar;
 public class CheckOutConfirmationDialog extends AppCompatActivity {
 
     FirebaseDatabase database;
-    DatabaseReference dbref, dbref2;
-    String bookKey, userID, macAddress;
+    DatabaseReference dbref, dbref2, dbref3;
+    String bookKey, userID, macAddress, workspaceID, bookDate;
+    int startTime, endTime;
     Button btnCancel, btnCheckOut;
 
     @Override
@@ -36,6 +37,11 @@ public class CheckOutConfirmationDialog extends AppCompatActivity {
         macAddress = intent.getStringExtra("macAddress");
         userID = intent.getStringExtra("userID");
 
+        workspaceID = intent.getStringExtra("workspaceID");
+        bookDate = intent.getStringExtra("bookDate");
+        startTime = intent.getIntExtra("startTime",0);
+        endTime = intent.getIntExtra("endTime",0);
+
         database = FirebaseDatabase.getInstance();
         dbref = database.getReference("/users/" + userID + "/booking/" + bookKey);
         dbref2 = database.getReference("arduino/" + macAddress);
@@ -51,6 +57,7 @@ public class CheckOutConfirmationDialog extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String checkOutTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+                deleteSlotForEarlyCheckOut("08:30");
                 dbref.child("checkOutTime").setValue(checkOutTime);
                 dbref.child("checkOutStatus").setValue("1");
                 dbref.child("bookingStatus").setValue("Completed");
@@ -62,7 +69,20 @@ public class CheckOutConfirmationDialog extends AppCompatActivity {
 
     }
     // to check if user checkout early -> delete timeslot in workspace booking
-//    public int checkTime(){
-//
-//    }
+    public void deleteSlotForEarlyCheckOut(String currentTime){
+        int initialSlot;
+        String[] timeNow = currentTime.split("[:]");
+        if(timeNow[1].compareTo("30") < 0){
+            initialSlot = Integer.parseInt(timeNow[0]);
+        }
+        else{
+            initialSlot = Integer.parseInt(timeNow[0]);
+            initialSlot = initialSlot + 1;
+        }
+        dbref3 = database.getReference("/workspace/" + workspaceID + "/booking/" + bookDate);
+        for(int i = initialSlot; i < endTime; i++) {
+            String time = Integer.toString(i);
+            dbref3.child(time).removeValue();
+        }
+    }
 }

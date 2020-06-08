@@ -67,7 +67,7 @@ public class NotificationFragment extends Fragment {
         dbRef = database.getReference("/users/" + userID + "/notification");
 
 
-        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){

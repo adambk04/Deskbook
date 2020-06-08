@@ -1,5 +1,6 @@
 package com.example.deskbook;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -218,6 +219,9 @@ public class HomeFragment extends Fragment {
                 dbref2.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (getActivity() == null) {
+                            return;
+                        }
                         Workspace workspace = dataSnapshot.getValue(Workspace.class);
                         holder.setIvWorkspace(workspace.getWorkspaceImage());
                         holder.setTvWorkspaceName(workspace.getWorkspaceName());
@@ -362,6 +366,10 @@ public class HomeFragment extends Fragment {
                         x.putExtra("bookKey", adapter.getRef(position).getKey());
                         x.putExtra("userID", userID);
                         x.putExtra("macAddress", board);
+                        x.putExtra("workspaceID", workspaceID);
+                        x.putExtra("bookDate", bookDate);
+                        x.putExtra("startTime", bookStartTime);
+                        x.putExtra("endTime", bookEndTime);
                         startActivity(x);
                     }
                 }
