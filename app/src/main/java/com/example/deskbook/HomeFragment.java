@@ -159,10 +159,10 @@ public class HomeFragment extends Fragment {
             }
         }
         else if (z < 0) {
-            check = 2;
+            check = 3;
         }
         else {
-            check = 1;
+            check = 3;
         }
         return check;
     }
@@ -293,7 +293,6 @@ public class HomeFragment extends Fragment {
                                                 I.putExtra("bookKey", bookKey);
                                                 startActivity(I);
                                             }
-
                                         }
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -353,6 +352,9 @@ public class HomeFragment extends Fragment {
 //                        // if current time still less than bookingStartTime
 //                        else if (check == 2){
 //                            Toast.makeText(getActivity(), "booking time has not reach", Toast.LENGTH_SHORT).show();
+//                        }
+//                        else if (check == 3){
+//                            Toast.makeText(getActivity(), "booking date does not match current date", Toast.LENGTH_SHORT).show();
 //                        }
                     }
                     else{

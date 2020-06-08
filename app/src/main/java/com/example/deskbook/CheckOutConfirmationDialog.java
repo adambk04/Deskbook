@@ -50,7 +50,6 @@ public class CheckOutConfirmationDialog extends AppCompatActivity {
         btnCheckOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO turn off arduino board
                 String checkOutTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
                 dbref.child("checkOutTime").setValue(checkOutTime);
                 dbref.child("checkOutStatus").setValue("1");
@@ -62,4 +61,8 @@ public class CheckOutConfirmationDialog extends AppCompatActivity {
         });
 
     }
+    // to check if user checkout early -> delete timeslot in workspace booking
+//    public int checkTime(){
+//
+//    }
 }

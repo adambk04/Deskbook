@@ -217,7 +217,7 @@ public class SetupProfileActivity extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
                             Toast.makeText(SetupProfileActivity.this, "Saved", Toast.LENGTH_SHORT).show();
-                            deletePrevProfilePicture();
+//                            deletePrevProfilePicture();
 
                             Task<Uri> uri = taskSnapshot.getStorage().getDownloadUrl();
                             while(!uri.isComplete());

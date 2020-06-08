@@ -132,6 +132,8 @@ public class NotificationFragment extends Fragment {
                             I.putExtra("bookingID", invite.getBookingID());
                             I.putExtra("fromUserID", invite.getFromUserID());
                             I.putExtra("inviteID", inviteID);
+                            I.putExtra("bookingDate", invite.getDate());
+                            I.putExtra("bookingTime", invite.getTime());
                             startActivity(I);
                         }
                     });

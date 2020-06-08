@@ -114,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     code = ds.child("code").getValue(String.class);
                     email2 = ds.child("email").getValue(String.class);
-                    if(email2 != null){
-                        Toast.makeText(MainActivity.this, "Employee code has already been registered", Toast.LENGTH_LONG).show();
+                    if(!email.equals(email2)){
+                        Toast.makeText(MainActivity.this, "Employee code does not match the registered email address", Toast.LENGTH_LONG).show();
                     }
                     else {
                         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(MainActivity.this, new OnCompleteListener() {
@@ -126,22 +126,22 @@ public class MainActivity extends AppCompatActivity {
                                         "SignUp unsuccessful: " + task.getException().getMessage(),
                                         Toast.LENGTH_SHORT).show();
                             } else {
-                                dbRef.orderByChild("code").equalTo(code).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        String codeKey = dataSnapshot.getChildren().iterator().next().getKey();
-                                        dbRef.child(codeKey).child("email").setValue(email);
-                                        Toast.makeText(MainActivity.this.getApplicationContext(),
-                                                "SignUp successful",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
-                                Intent I = new Intent(MainActivity.this, LoginActivity.class);
+//                                dbRef.orderByChild("code").equalTo(code).addListenerForSingleValueEvent(new ValueEventListener() {
+//                                    @Override
+//                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                        String codeKey = dataSnapshot.getChildren().iterator().next().getKey();
+//                                        dbRef.child(codeKey).child("email").setValue(email);
+//                                        Toast.makeText(MainActivity.this.getApplicationContext(),
+//                                                "SignUp successful",
+//                                                Toast.LENGTH_SHORT).show();
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                    }
+//                                });
+                                Intent I = new Intent(MainActivity.this, MainFragmentActivity.class);
                                 I.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(I);
                             }
