@@ -1,7 +1,12 @@
 package com.example.deskbook;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,8 +21,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -50,7 +58,7 @@ public class HomeFragment extends Fragment {
     LinearLayoutManager linearLayoutManager;
     FirebaseDatabase database;
     FirebaseRecyclerAdapter adapter;
-    DatabaseReference dbRef,dbref2, dbRef3, dbRef4;
+    DatabaseReference dbRef,dbref2, dbRef3, dbRef4, dbRef5;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
     String userID;
@@ -213,6 +221,7 @@ public class HomeFragment extends Fragment {
                     holder.setBtnBook("Check In");
                 } else {
                     holder.setBtnBook("Check Out");
+                    holder.setBtnLight();
                 }
                 String workspaceKey = userBooking.getWorkspaceID();
                 dbref2 = database.getReference("/workspace/" + workspaceKey);
@@ -232,6 +241,23 @@ public class HomeFragment extends Fragment {
                         if(workspace.getCapacity().compareTo("1") > 0){
                             holder.setBtnShare();
                         }
+                        dbRef5 = database.getReference("/arduino/" + workspace.getMacAddress() + "/light");
+                        dbRef5.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String lightState = dataSnapshot.getValue(String.class);
+                                System.out.println("light state : " + lightState);
+                                if(lightState.equals("ON")){
+                                    holder.setLightTintOn();
+                                }
+                                else{
+                                    holder.setLightTintOff();
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -245,12 +271,12 @@ public class HomeFragment extends Fragment {
     public class ViewHolder extends RecyclerView.ViewHolder{
         public LinearLayout root;
         public Button btnBook;
-        public ImageButton btnMenu, btnShare;
+        public ImageButton btnMenu, btnShare, btnLight;
         public ImageView ivWorkspace;
         public TextView tvWorkspaceName, tvCapacity, tvLocation, tvBookDate, tvBookTime, tvAmenity,tvQueue;
         public int position,bookStartTime, bookEndTime;
         public String workspaceID, bookDate, bookingTime;
-        public String board;
+        public String board, lightState;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -259,6 +285,7 @@ public class HomeFragment extends Fragment {
             btnBook = itemView.findViewById(R.id.BtnBook);
             btnMenu = itemView.findViewById(R.id.BtnBookingMenu);
             btnShare = itemView.findViewById(R.id.BtnShareBooking);
+            btnLight = itemView.findViewById(R.id.BtnLight);
             tvAmenity = itemView.findViewById(R.id.TVamenity4);
             tvWorkspaceName = itemView.findViewById(R.id.TVworkspaceName4);
             tvCapacity = itemView.findViewById(R.id.TVuserCapacity4);
@@ -335,6 +362,29 @@ public class HomeFragment extends Fragment {
                     x.putExtra("bookingTime", bookingTime);
                     x.putExtra("bookingID", adapter.getRef(position).getKey());
                     startActivity(x);
+                }
+            });
+
+            btnLight.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final DatabaseReference ref = database.getReference("/arduino/" + board + "/light");
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String lightState = dataSnapshot.getValue(String.class);
+                            if(lightState.equals("ON")){
+                                ref.setValue("OFF");
+                            }
+                            else{
+                                ref.setValue("ON");
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             });
 
@@ -423,11 +473,26 @@ public class HomeFragment extends Fragment {
         public void setBtnShare(){
             btnShare.setVisibility(View.VISIBLE);
         }
+        public void setBtnLight(){
+            btnLight.setVisibility(View.VISIBLE);
+        }
         public void setBookingTime(String bookingTime) {
             this.bookingTime = bookingTime;
         }
         public void setMacAddress(String string){
-            board = string;
+            this.board = string;
+        }
+        public void setLightTintOn(){
+            DrawableCompat.setTint(
+                    DrawableCompat.wrap(btnLight.getDrawable()),
+                    ContextCompat.getColor(getContext(), R.color.lightOn)
+            );
+        }
+        public void setLightTintOff(){
+            DrawableCompat.setTint(
+                    DrawableCompat.wrap(btnLight.getDrawable()),
+                    ContextCompat.getColor(getContext(), R.color.lightGray)
+            );
         }
         public void startScanning(){
             bookingKey = adapter.getRef(position).getKey();

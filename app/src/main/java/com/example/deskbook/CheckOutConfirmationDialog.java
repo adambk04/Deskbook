@@ -57,11 +57,12 @@ public class CheckOutConfirmationDialog extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String checkOutTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-                deleteSlotForEarlyCheckOut("08:30");
+                deleteSlotForEarlyCheckOut(checkOutTime);
                 dbref.child("checkOutTime").setValue(checkOutTime);
                 dbref.child("checkOutStatus").setValue("1");
                 dbref.child("bookingStatus").setValue("Completed");
                 dbref2.child("state").setValue("OFF");
+                dbref2.child("light").setValue("OFF");
                 Toast.makeText(CheckOutConfirmationDialog.this, "Check Out Successful", Toast.LENGTH_LONG).show();
                 finish();
             }

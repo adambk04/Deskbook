@@ -211,6 +211,20 @@
                 app:layout_constraintBottom_toBottomOf="@+id/TVworkspaceName4"
                 app:layout_constraintStart_toEndOf="@+id/TVworkspaceName4"
                 app:layout_constraintTop_toTopOf="@+id/TVworkspaceName4" />
+
+            <ImageButton
+                android:id="@+id/BtnLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/design_default_color_background"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/BtnShareBooking"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_light_24"
+                tools:ignore="VectorDrawableCompat" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
