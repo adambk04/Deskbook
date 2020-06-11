@@ -98,7 +98,7 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
         // To fill up workspace information
         database = FirebaseDatabase.getInstance();
 
-        // If intent came from home fragment
+        // If intent came from home fragment (to extend booking)
         if(check == 1 ){
             btnSelectTime.setText("Extend Booking");
 

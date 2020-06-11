@@ -82,11 +82,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
+                android:layout_marginBottom="1dp"
                 android:background="@color/design_default_color_background"
                 app:layout_constraintBottom_toBottomOf="@+id/TVworkspaceName4"
                 app:layout_constraintEnd_toStartOf="@+id/TVworkspaceName4"
-                app:layout_constraintTop_toTopOf="@+id/TVworkspaceName4"
-                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/ic_work_black_24dp"
                 tools:ignore="VectorDrawableCompat" />
 

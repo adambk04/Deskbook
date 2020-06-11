@@ -13,8 +13,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/ic_history_black_24dp"
+        android:drawablePadding="8dp"
+        android:drawableTint="@color/lightGray"
+        android:gravity="center_vertical"
         android:text="Booking History"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No Recent Booking"
+        android:textColor="@color/lightGray"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

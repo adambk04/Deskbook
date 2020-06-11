@@ -38,7 +38,7 @@ public class WorkspaceListActivity extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     FirebaseRecyclerAdapter adapter;
     String typeAmenityKey;
-    Chip chipDate, chipWorkspaceType, chipCapacity, chipNone, chipMonitor, chipProjector,chipTelephone;
+    Chip chipDate, chipWorkspaceType, chipCapacity, chipNone, chipMonitor, chipProjector, chipTelephone;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -76,153 +76,151 @@ public class WorkspaceListActivity extends AppCompatActivity {
 
     }
 
-    public void generateChips(){
+    public void generateChips() {
         chipDate.setText(MainFragmentActivity.bookDate);
         chipCapacity.setText(SortWorkspaceDialog.userCapacity + " Pax");
-        if(SortWorkspaceDialog.workspaceType.equals("Desk")) {
+        if (SortWorkspaceDialog.workspaceType.equals("Desk")) {
             chipWorkspaceType.setText("Desk");
-        }
-        else {
+        } else {
             chipWorkspaceType.setText("Room");
         }
-        if(SortWorkspaceDialog.amenity1 != null){
+        if (SortWorkspaceDialog.amenity1 != null) {
             chipMonitor.setVisibility(View.VISIBLE);
         }
-        if(SortWorkspaceDialog.amenity2 != null){
+        if (SortWorkspaceDialog.amenity2 != null) {
             chipProjector.setVisibility(View.VISIBLE);
         }
-        if(SortWorkspaceDialog.amenity3 != null){
+        if (SortWorkspaceDialog.amenity3 != null) {
             chipTelephone.setVisibility(View.VISIBLE);
         }
-        if(SortWorkspaceDialog.amenity4 != null){
+        if (SortWorkspaceDialog.amenity4 != null) {
             chipNone.setVisibility(View.VISIBLE);
         }
     }
 
-    public void createTypeAmenityKey(){
+    public void createTypeAmenityKey() {
         typeAmenityKey = SortWorkspaceDialog.userCapacity;
 
-        if(SortWorkspaceDialog.workspaceType.equals("Desk")) {
+        if (SortWorkspaceDialog.workspaceType.equals("Desk")) {
             typeAmenityKey = typeAmenityKey + "d";
-        }
-        else {
+        } else {
             typeAmenityKey = typeAmenityKey + "r";
         }
-        if(SortWorkspaceDialog.amenity1 != null){
+        if (SortWorkspaceDialog.amenity1 != null) {
             typeAmenityKey = typeAmenityKey + "1";
         }
-        if(SortWorkspaceDialog.amenity2 != null){
+        if (SortWorkspaceDialog.amenity2 != null) {
             typeAmenityKey = typeAmenityKey + "2";
         }
-        if(SortWorkspaceDialog.amenity3 != null){
+        if (SortWorkspaceDialog.amenity3 != null) {
             typeAmenityKey = typeAmenityKey + "3";
         }
-        if(SortWorkspaceDialog.amenity4 != null){
+        if (SortWorkspaceDialog.amenity4 != null) {
             typeAmenityKey = typeAmenityKey + "4";
         }
     }
 
-        private void fetch(){
-            Query query = dbRef.orderByChild("typeAmenity").equalTo(typeAmenityKey);
+    private void fetch() {
+        Query query = dbRef.orderByChild("typeAmenity").equalTo(typeAmenityKey);
 
-            FirebaseRecyclerOptions<Workspace> options =
-                    new FirebaseRecyclerOptions.Builder<Workspace>()
-                            .setQuery(query, Workspace.class).build();
+        FirebaseRecyclerOptions<Workspace> options =
+                new FirebaseRecyclerOptions.Builder<Workspace>()
+                        .setQuery(query, Workspace.class).build();
 
-            adapter = new FirebaseRecyclerAdapter<Workspace, ViewHolder>(options) {
-                @Override
-                public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                    View view = LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.workspace_row, parent, false);
+        adapter = new FirebaseRecyclerAdapter<Workspace, ViewHolder>(options) {
+            @Override
+            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.workspace_row, parent, false);
 
-                    return new ViewHolder(view);
+                return new ViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(final ViewHolder holder, final int position, Workspace workspace) {
+                if (workspace.getBlockStatus().equals("0")) {
+
+                    holder.setTvWorkspaceName(workspace.getWorkspaceName());
+                    holder.setTvLocation(workspace.getLocation());
+                    holder.setIvWorkspace(workspace.getWorkspaceImage());
+                    holder.setTvAmenities(workspace.getAmenities().getFullAmenity());
+                    holder.setTvCapacity(workspace.getCapacity());
+
+                    holder.root.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String workspaceKey = adapter.getRef(holder.getAdapterPosition()).getKey();
+                            Intent I = new Intent(WorkspaceListActivity.this, WorkspaceBookSlotActivity.class);
+                            I.putExtra("key", workspaceKey);
+                            startActivity(I);
+                        }
+                    });
+                } else {
+                    holder.setCvWorkspaceGone();
                 }
+            }
+        };
+        workspaceList.setAdapter(adapter);
+    }
 
-                @Override
-                protected void onBindViewHolder(ViewHolder holder, final int position, Workspace workspace) {
-                    if(workspace.getBlockStatus().equals("0")) {
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public LinearLayout root;
+        public TextView tvWorkspaceName;
+        public TextView tvLocation;
+        public TextView tvAmenities;
+        public TextView tvCapacity;
+        public ImageView ivWorkspace;
+        public CardView cvWorkspace;
 
-                        holder.setTvWorkspaceName(workspace.getWorkspaceName());
-                        holder.setTvLocation(workspace.getLocation());
-                        holder.setIvWorkspace(workspace.getWorkspaceImage());
-                        holder.setTvAmenities(workspace.getAmenities().getFullAmenity());
-                        holder.setTvCapacity(workspace.getCapacity());
-
-                        holder.root.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                //                        Toast.makeText(WorkspaceListActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
-                                String workspaceKey = adapter.getRef(position).getKey();
-                                Intent I = new Intent(WorkspaceListActivity.this, WorkspaceBookSlotActivity.class);
-                                I.putExtra("key", workspaceKey);
-                                startActivity(I);
-                            }
-                        });
-                    }
-                    else{
-                        holder.setCvWorkspaceGone();
-                    }
-                }
-            };
-            workspaceList.setAdapter(adapter);
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            root = itemView.findViewById(R.id.list_root);
+            tvWorkspaceName = itemView.findViewById(R.id.TVworkspaceName);
+            tvLocation = itemView.findViewById(R.id.TVlocation);
+            tvAmenities = itemView.findViewById(R.id.TVamenity);
+            tvCapacity = itemView.findViewById(R.id.TVuserCapacity);
+            ivWorkspace = itemView.findViewById(R.id.IVworkspace);
+            cvWorkspace = itemView.findViewById(R.id.CVworkspaceRow);
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder{
-            public LinearLayout root;
-            public TextView tvWorkspaceName;
-            public TextView tvLocation;
-            public TextView tvAmenities;
-            public TextView tvCapacity;
-            public ImageView ivWorkspace;
-            public CardView cvWorkspace;
-
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                root = itemView.findViewById(R.id.list_root);
-                tvWorkspaceName = itemView.findViewById(R.id.TVworkspaceName);
-                tvLocation = itemView.findViewById(R.id.TVlocation);
-                tvAmenities = itemView.findViewById(R.id.TVamenity);
-                tvCapacity = itemView.findViewById(R.id.TVuserCapacity);
-                ivWorkspace = itemView.findViewById(R.id.IVworkspace);
-                cvWorkspace = itemView.findViewById(R.id.CVworkspaceRow);
-            }
-
-            public void setTvWorkspaceName(String string1) {
-                tvWorkspaceName.setText(string1);
-            }
-
-            public void setTvLocation(String string2) {
-                tvLocation.setText(string2);
-            }
-
-            public void setTvAmenities(String string3) {
-                tvAmenities.setText(string3);
-            }
-
-            public void setTvCapacity(String string) {
-                tvCapacity.setText("(" + string + " Pax)");
-            }
-
-            public void setIvWorkspace(String  string4) {
-                RequestOptions options = new RequestOptions();
-                options.centerCrop();
-                Glide.with(getApplicationContext()).load(string4).apply(options).into(ivWorkspace);
-            }
-            public void setCvWorkspaceGone(){
-                cvWorkspace.setVisibility(View.GONE);
-            }
+        public void setTvWorkspaceName(String string1) {
+            tvWorkspaceName.setText(string1);
         }
 
-
-        @Override
-        protected void onStart() {
-            super.onStart();
-            adapter.startListening();
+        public void setTvLocation(String string2) {
+            tvLocation.setText(string2);
         }
 
-        @Override
-        protected void onStop() {
-            super.onStop();
-            adapter.stopListening();
+        public void setTvAmenities(String string3) {
+            tvAmenities.setText(string3);
         }
+
+        public void setTvCapacity(String string) {
+            tvCapacity.setText("(" + string + " Pax)");
+        }
+
+        public void setIvWorkspace(String string4) {
+            RequestOptions options = new RequestOptions();
+            options.centerCrop();
+            Glide.with(getApplicationContext()).load(string4).apply(options).into(ivWorkspace);
+        }
+
+        public void setCvWorkspaceGone() {
+            cvWorkspace.setVisibility(View.GONE);
+        }
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
 }

@@ -483,15 +483,21 @@ public class HomeFragment extends Fragment {
             this.board = string;
         }
         public void setLightTintOn(){
+            if (getActivity() == null) {
+                return;
+            }
             DrawableCompat.setTint(
                     DrawableCompat.wrap(btnLight.getDrawable()),
-                    ContextCompat.getColor(getContext(), R.color.lightOn)
+                    ContextCompat.getColor(getActivity(), R.color.lightOn)
             );
         }
         public void setLightTintOff(){
+            if (getActivity() == null) {
+                return;
+            }
             DrawableCompat.setTint(
                     DrawableCompat.wrap(btnLight.getDrawable()),
-                    ContextCompat.getColor(getContext(), R.color.lightGray)
+                    ContextCompat.getColor(getActivity(), R.color.lightGray)
             );
         }
         public void startScanning(){
