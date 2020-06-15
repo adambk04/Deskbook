@@ -130,20 +130,25 @@ public class MakeReportActivity extends AppCompatActivity {
                 date = parts[0];
                 time = parts[1];
                 desc = etReport.getText().toString();
-                dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        User user = dataSnapshot.getValue(User.class);
-                        userImage = user.getProfilePic();
-                        userName = user.getName();
-                        uploadImage();
-                    }
+                if(desc.matches("")){
+                    etReport.setError("Field is empty");
+                }
+                else {
+                    dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+                            userImage = user.getProfilePic();
+                            userName = user.getName();
+                            uploadImage();
+                        }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
+                        }
+                    });
+                }
             }
         });
 

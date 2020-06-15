@@ -68,45 +68,52 @@ public class InviteToWorkspaceDialog extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbRef.orderByChild("email").equalTo(etEmail.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(!dataSnapshot.exists()){
-                            Toast.makeText(InviteToWorkspaceDialog.this, "User Not Found", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
-                            Iterator<DataSnapshot> iterator = snapshotIterator.iterator();
+                String email = etEmail.getText().toString();
+                if(email.matches("")){
+                    etEmail.setError("Field is empty");
+                }
+                else {
+                    dbRef.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (!dataSnapshot.exists()) {
+                                Toast.makeText(InviteToWorkspaceDialog.this, "User Not Found", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
+                                Iterator<DataSnapshot> iterator = snapshotIterator.iterator();
 
-                            while (iterator.hasNext()) {
-                                DataSnapshot next = iterator.next();
-                                recipientID = next.getKey();
+                                while (iterator.hasNext()) {
+                                    DataSnapshot next = iterator.next();
+                                    recipientID = next.getKey();
+                                }
+                                dbRef2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        User user = dataSnapshot.getValue(User.class);
+                                        userName = user.getName();
+                                        profilePicture = user.getProfilePic();
+                                        dbRef3 = database.getReference("/users/" + recipientID + "/notification");
+                                        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+                                        String key = dbRef3.push().getKey();
+                                        Invites invite = new Invites(userID, bookingID, bookDate, bookStartTime, userName, workspaceName, timeStamp, profilePicture);
+                                        invite.setType("invitation");
+                                        dbRef3.child(key).setValue(invite);
+                                        Toast.makeText(InviteToWorkspaceDialog.this, "Invitation Sent", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    }
+                                });
                             }
-                            dbRef2.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    User user = dataSnapshot.getValue(User.class);
-                                    userName = user.getName();
-                                    profilePicture = user.getProfilePic();
-                                    dbRef3 = database.getReference("/users/" + recipientID + "/notification");
-                                    String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-                                    String key = dbRef3.push().getKey();
-                                    Invites invite = new Invites(userID, bookingID, bookDate, bookStartTime, userName,workspaceName, timeStamp, profilePicture);
-                                    invite.setType("invitation");
-                                    dbRef3.child(key).setValue(invite);
-                                    Toast.makeText(InviteToWorkspaceDialog.this, "Invitation Sent", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-                                }
-                            });
                         }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
+                }
             }
         });
     }

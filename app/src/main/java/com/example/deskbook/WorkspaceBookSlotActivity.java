@@ -44,6 +44,8 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
     String workspaceID, bookDate, bookingID;
     int bookStartTime, bookEndTime, check;
     public static int[] time;
+    public int [] extendTime;
+    int extendCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +103,8 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
         // If intent came from home fragment (to extend booking)
         if(check == 1 ){
             btnSelectTime.setText("Extend Booking");
+            extendTime = new int[12];
+            extendCount = 0;
 
             dbref3 = database.getReference("/workspace/" + workspaceID);
             dbref4 = database.getReference("/workspace/" + workspaceID + "/booking/" + bookDate);
@@ -133,6 +137,8 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
                             // to make time chip green color for time slot that is currently booked by the user
                             String id = ds.getValue().toString();
                             if(id.equals(userID)){
+                                extendTime[extendCount] = Integer.parseInt(x);
+                                extendCount++;
                                 Chip chip = (Chip) findViewById(getResources().getIdentifier("Chip" + x, "id", packageName));
                                 chip.setCheckable(false);
                                 chip.setChipBackgroundColor(getResources().getColorStateList(R.color.userBooked));
@@ -217,19 +223,26 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //if intent came to extend booking time
                 if(check == 1){
-                    boolean checkError = getCheckedError();
+                    int checkError = getExtendError();
                     if (time[0] == 99) {
                         Toast.makeText(WorkspaceBookSlotActivity.this, "Please Select Time Slot", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        if (checkError) {
+                        if (checkError == 0) {
                             Intent j = new Intent(WorkspaceBookSlotActivity.this, ExtendBookingConfirmationDialog.class);
                             j.putExtra("workspaceID", workspaceID );
                             j.putExtra("bookDate", bookDate);
                             j.putExtra("bookingID", bookingID   );
                             startActivity(j);
-                        } else {
-                            Toast.makeText(WorkspaceBookSlotActivity.this, "Cant leave gap between time slot", Toast.LENGTH_SHORT).show();
+                        }
+                        else if (checkError == 1) {
+                            Toast.makeText(WorkspaceBookSlotActivity.this, "Cant select lesser time slot than booked slot", Toast.LENGTH_SHORT).show();
+                        }
+                        else if (checkError == 2) {
+                            Toast.makeText(WorkspaceBookSlotActivity.this, "Time slot has to be next to booked slot", Toast.LENGTH_SHORT).show();
+                        }
+                        else if (checkError == 3) {
+                            Toast.makeText(WorkspaceBookSlotActivity.this, "Cant leave gap between timeslot", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -254,6 +267,44 @@ public class WorkspaceBookSlotActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public int getExtendError(){
+        int count = 0;
+        int error = 0;
+        time = new int[12];
+        for (int i = 8; i < 20; i++) {
+            Chip chip = (Chip) findViewById(getResources().getIdentifier("Chip" + i, "id", packageName));
+            if (chip.isChecked()) {
+                time[count] = i;
+            } else {
+                time[count] = 99;
+            }
+            count++;
+        }
+        //to sort array in ascending order
+        Arrays.sort(time);
+
+        //to check if extend time slot is lesser than booked slot
+        if (time[0] < extendTime[0]){
+            error = 1;
+        }
+        //to check if extend time slot is next to booked slot
+        else if(time[0] != (extendTime[extendCount-1] + 1)){
+            error = 2;
+        }
+        else {
+            //to check if there is gap between selected time slot
+            for (int x = 0; x < 12; x++) {
+                if (time[x] != 99 && time[x + 1] != 99) {
+                    if (time[x + 1] - time[x] != 1) {
+                        error = 3;
+                        break;
+                    }
+                }
+            }
+        }
+        return error;
     }
 
     public boolean getCheckedError() {
