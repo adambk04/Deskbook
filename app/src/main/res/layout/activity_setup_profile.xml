@@ -9,15 +9,6 @@
     tools:context=".SetupProfileActivity">
 
     <Button
-        android:id="@+id/BTNpicture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Change Picture"
-        app:layout_constraintEnd_toEndOf="@+id/IVprofile"
-        app:layout_constraintStart_toStartOf="@+id/IVprofile"
-        app:layout_constraintTop_toBottomOf="@+id/IVprofile" />
-
-    <Button
         android:id="@+id/BTNsaveProfile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -88,7 +79,6 @@
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="Department"
         app:layout_constraintBottom_toTopOf="@+id/SpinnerDepartment"
         app:layout_constraintStart_toStartOf="@+id/textFieldPhone"
@@ -119,6 +109,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:hint="Phone Number"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/textView9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -144,6 +135,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:hint="Name"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/textFieldPhone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -159,5 +151,18 @@
             android:ems="10"
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/BTNpicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:scaleType="center"
+        app:backgroundTint="@color/colorAccent"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="@+id/IVprofile"
+        app:layout_constraintStart_toEndOf="@+id/IVprofile"
+        app:srcCompat="@drawable/ic_baseline_add_24"
+        tools:ignore="VectorDrawableCompat" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

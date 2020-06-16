@@ -29,6 +29,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -51,7 +53,8 @@ import java.util.UUID;
 public class SetupProfileActivity extends AppCompatActivity {
 
     public ImageView ivProfile;
-    public Button btnSaveProfile, btnPicture;
+    public Button btnSaveProfile;
+    public FloatingActionButton btnPicture;
     public EditText etName, etDepartment, etPhoneNum;
     public RadioGroup rgGender;
     public RadioButton rbMale, rbFemale;
@@ -66,6 +69,7 @@ public class SetupProfileActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference dbRef, dbRef2;
     FragmentManager fragmentManager;
+    TextInputLayout nameInputLayout, phoneInputLayout;
     String userID;
     List<String> departmentList;
     ArrayAdapter<String> departmentAdapter;
@@ -108,6 +112,8 @@ public class SetupProfileActivity extends AppCompatActivity {
         rgGender = findViewById(R.id.RGgender);
         rbMale = findViewById(R.id.RBmale);
         rbFemale = findViewById(R.id.RBfemale);
+        nameInputLayout = findViewById(R.id.textFieldName);
+        phoneInputLayout = findViewById(R.id.textFieldPhone);
 
         filePath = null;
 
@@ -198,7 +204,17 @@ public class SetupProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
 //                String dept = String.valueOf(spinnerDept.getSelectedItem());
 //                Toast.makeText(SetupProfileActivity.this, dept, Toast.LENGTH_SHORT).show();
-                uploadImage();
+                String name = etName.getText().toString();
+                String phone = etPhoneNum.getText().toString();
+                if(name.matches("")){
+                    nameInputLayout.setError("Field is empty");
+                }
+                if(phone.matches("")){
+                    phoneInputLayout.setError("Field is empty");
+                }
+                if(!name.matches("") && !phone.matches("")) {
+                    uploadImage();
+                }
             }
         });
     }
